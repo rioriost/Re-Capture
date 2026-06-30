@@ -1,0 +1,4 @@
+screenshot-renamer
+*.dSYM/
+*.app/
+.DS_Store
