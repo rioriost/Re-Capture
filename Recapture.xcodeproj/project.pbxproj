@@ -1,0 +1,400 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0C728BB979C33040E14ED8C6 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C9045D377996B4388E4D15 /* SettingsView.swift */; };
+		3837625BA9FED6A02C49C821 /* AppController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0260081E431B470FBA892B7 /* AppController.swift */; };
+		4405DF4E129C447430FE1180 /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4804AD0DD1E14A7DD7A253EE /* SettingsStore.swift */; };
+		57594198E3CB0EDE6DC0F7D6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 66C8997B66C8DF9B54F02A30 /* Localizable.strings */; };
+		63A1DB53AA142ADA0E84D558 /* SDWebImageWebPCoder in Frameworks */ = {isa = PBXBuildFile; productRef = CFF362287DA41AC318BE6A13 /* SDWebImageWebPCoder */; };
+		75E0E475FB3A44E666575B11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F7D527DDC9C09D5F58094301 /* Assets.xcassets */; };
+		7ED5866EB770B9EB025D7245 /* ScreenshotWatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FAE9A0D17EF4C67369D82E /* ScreenshotWatcher.swift */; };
+		8753481A0E5D305DB0A4FC28 /* RecaptureApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578195084729FEE0AF05ADD5 /* RecaptureApp.swift */; };
+		C0117D363CDBADCCA8870E41 /* TemplateRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86532FFE3D6885B5CB1D6BB9 /* TemplateRenderer.swift */; };
+		E1BFC9D697C1715DB6340C98 /* ImageConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DCAABF88DF85DE719ABB99 /* ImageConverter.swift */; };
+		E746EA5F8494AD821942525E /* ScreenshotProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37AC5E78C6C53AEE2C176882 /* ScreenshotProcessor.swift */; };
+		FE2FE7D01DCB54D02D6527B6 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AE290F4902553BFC0921FB /* Models.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		00791F0598081B71AE6F1976 /* Recapture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Recapture.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		03D8CC8EB5530033E3122D9B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		32C9045D377996B4388E4D15 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		37AC5E78C6C53AEE2C176882 /* ScreenshotProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotProcessor.swift; sourceTree = "<group>"; };
+		3C5149516AB75E18AC4FC4BF /* Recapture.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Recapture.entitlements; sourceTree = "<group>"; };
+		4804AD0DD1E14A7DD7A253EE /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
+		48DCAABF88DF85DE719ABB99 /* ImageConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageConverter.swift; sourceTree = "<group>"; };
+		578195084729FEE0AF05ADD5 /* RecaptureApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecaptureApp.swift; sourceTree = "<group>"; };
+		74FAE9A0D17EF4C67369D82E /* ScreenshotWatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotWatcher.swift; sourceTree = "<group>"; };
+		86532FFE3D6885B5CB1D6BB9 /* TemplateRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateRenderer.swift; sourceTree = "<group>"; };
+		86AE290F4902553BFC0921FB /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		C0260081E431B470FBA892B7 /* AppController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppController.swift; sourceTree = "<group>"; };
+		F503470E4C4062B9D5837315 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F7A94619C908B85A6331DE1B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F7D527DDC9C09D5F58094301 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A74831005708561B2B3128AF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				63A1DB53AA142ADA0E84D558 /* SDWebImageWebPCoder in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1D88B801BEAA18E2B291D077 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				00791F0598081B71AE6F1976 /* Recapture.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		88C793A865B25793EFC53B52 = {
+			isa = PBXGroup;
+			children = (
+				91EC7CD198CB73AB94F355E3 /* Recapture */,
+				1D88B801BEAA18E2B291D077 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		91EC7CD198CB73AB94F355E3 /* Recapture */ = {
+			isa = PBXGroup;
+			children = (
+				C0260081E431B470FBA892B7 /* AppController.swift */,
+				F7D527DDC9C09D5F58094301 /* Assets.xcassets */,
+				48DCAABF88DF85DE719ABB99 /* ImageConverter.swift */,
+				03D8CC8EB5530033E3122D9B /* Info.plist */,
+				86AE290F4902553BFC0921FB /* Models.swift */,
+				3C5149516AB75E18AC4FC4BF /* Recapture.entitlements */,
+				578195084729FEE0AF05ADD5 /* RecaptureApp.swift */,
+				37AC5E78C6C53AEE2C176882 /* ScreenshotProcessor.swift */,
+				74FAE9A0D17EF4C67369D82E /* ScreenshotWatcher.swift */,
+				4804AD0DD1E14A7DD7A253EE /* SettingsStore.swift */,
+				32C9045D377996B4388E4D15 /* SettingsView.swift */,
+				86532FFE3D6885B5CB1D6BB9 /* TemplateRenderer.swift */,
+				66C8997B66C8DF9B54F02A30 /* Localizable.strings */,
+			);
+			path = Recapture;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F6EC5353220F4E1E65566EC5 /* Recapture */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 02554F6C08F2409CC9A68704 /* Build configuration list for PBXNativeTarget "Recapture" */;
+			buildPhases = (
+				12D6A640F88837004FACD625 /* Sources */,
+				E683F7494C641A37486C931A /* Resources */,
+				A74831005708561B2B3128AF /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Recapture;
+			packageProductDependencies = (
+				CFF362287DA41AC318BE6A13 /* SDWebImageWebPCoder */,
+			);
+			productName = Recapture;
+			productReference = 00791F0598081B71AE6F1976 /* Recapture.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		346D5B8521B02EC8CE5DD45B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					F6EC5353220F4E1E65566EC5 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = D6F3B14ECB499E18DC056A27 /* Build configuration list for PBXProject "Recapture" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+				ja,
+			);
+			mainGroup = 88C793A865B25793EFC53B52;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				32CF5F4AB8C9B8B51843995B /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 1D88B801BEAA18E2B291D077 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F6EC5353220F4E1E65566EC5 /* Recapture */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E683F7494C641A37486C931A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75E0E475FB3A44E666575B11 /* Assets.xcassets in Resources */,
+				57594198E3CB0EDE6DC0F7D6 /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		12D6A640F88837004FACD625 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3837625BA9FED6A02C49C821 /* AppController.swift in Sources */,
+				E1BFC9D697C1715DB6340C98 /* ImageConverter.swift in Sources */,
+				FE2FE7D01DCB54D02D6527B6 /* Models.swift in Sources */,
+				8753481A0E5D305DB0A4FC28 /* RecaptureApp.swift in Sources */,
+				E746EA5F8494AD821942525E /* ScreenshotProcessor.swift in Sources */,
+				7ED5866EB770B9EB025D7245 /* ScreenshotWatcher.swift in Sources */,
+				4405DF4E129C447430FE1180 /* SettingsStore.swift in Sources */,
+				0C728BB979C33040E14ED8C6 /* SettingsView.swift in Sources */,
+				C0117D363CDBADCCA8870E41 /* TemplateRenderer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		66C8997B66C8DF9B54F02A30 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F7A94619C908B85A6331DE1B /* en */,
+				F503470E4C4062B9D5837315 /* ja */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		22164CCE1826A98AE299BD78 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Recapture/Recapture.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = Recapture/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = st.rio.recapture;
+				PRODUCT_NAME = "Re-Capture";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		2D2A3C0B525FFEE04F34A89C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		B4910716405FB649C5AA9E53 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		EA69FD80AC46726846BE5BA6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Recapture/Recapture.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = Recapture/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = st.rio.recapture;
+				PRODUCT_NAME = "Re-Capture";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		02554F6C08F2409CC9A68704 /* Build configuration list for PBXNativeTarget "Recapture" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EA69FD80AC46726846BE5BA6 /* Debug */,
+				22164CCE1826A98AE299BD78 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		D6F3B14ECB499E18DC056A27 /* Build configuration list for PBXProject "Recapture" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B4910716405FB649C5AA9E53 /* Debug */,
+				2D2A3C0B525FFEE04F34A89C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		32CF5F4AB8C9B8B51843995B /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageWebPCoder.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.15.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CFF362287DA41AC318BE6A13 /* SDWebImageWebPCoder */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 32CF5F4AB8C9B8B51843995B /* XCRemoteSwiftPackageReference "SDWebImageWebPCoder" */;
+			productName = SDWebImageWebPCoder;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 346D5B8521B02EC8CE5DD45B /* Project object */;
+}

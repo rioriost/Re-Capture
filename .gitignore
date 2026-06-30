@@ -1,4 +1,9 @@
-screenshot-renamer
-*.dSYM/
-*.app/
 .DS_Store
+*.app/
+*.dSYM/
+*.xcuserstate
+xcuserdata/
+DerivedData/
+build/
+.build/
+screenshot-renamer
