@@ -1,5 +1,6 @@
 import AppKit
 import CoreGraphics
+import Darwin
 import Foundation
 import UniformTypeIdentifiers
 
@@ -127,11 +128,13 @@ struct ScreenshotDefaults: Equatable {
 
     static let domain = "com.apple.screencapture"
 
+    static var defaultLocationURL: URL {
+        realUserHomeDirectoryURL.appendingPathComponent("Desktop", isDirectory: true)
+    }
+
     static func current() -> ScreenshotDefaults {
         CFPreferencesAppSynchronize(domain as CFString)
 
-        let home = FileManager.default.homeDirectoryForCurrentUser
-        let defaultLocation = home.appendingPathComponent("Desktop", isDirectory: true)
         let location = CFPreferencesCopyAppValue("location" as CFString, domain as CFString) as? String
         let name = CFPreferencesCopyAppValue("name" as CFString, domain as CFString) as? String
         let type = CFPreferencesCopyAppValue("type" as CFString, domain as CFString) as? String
@@ -142,7 +145,7 @@ struct ScreenshotDefaults: Equatable {
 
         return ScreenshotDefaults(
             locationURL: URL(
-                fileURLWithPath: NSString(string: location ?? defaultLocation.path).expandingTildeInPath,
+                fileURLWithPath: NSString(string: location ?? defaultLocationURL.path).expandingTildeInPath,
                 isDirectory: true
             ),
             namePrefix: name ?? "Screenshot",
@@ -176,6 +179,14 @@ struct ScreenshotDefaults: Equatable {
             return number.boolValue
         }
         return defaultValue
+    }
+
+    private static var realUserHomeDirectoryURL: URL {
+        if let passwordEntry = getpwuid(getuid()), let homeDirectory = passwordEntry.pointee.pw_dir {
+            return URL(fileURLWithPath: String(cString: homeDirectory), isDirectory: true)
+        }
+
+        return FileManager.default.homeDirectoryForCurrentUser
     }
 }
 

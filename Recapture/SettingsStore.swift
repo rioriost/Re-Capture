@@ -45,12 +45,18 @@ final class SettingsStore: ObservableObject {
         outputQuality = defaults.object(forKey: Keys.outputQuality) as? Int ?? 85
         filenameTemplate = defaults.string(forKey: Keys.filenameTemplate) ?? "yyyyMMdd-HHmmss"
         screenshotDefaults = ScreenshotDefaults.current()
-        destinationURL = Self.restoreBookmark(defaults.data(forKey: Keys.destinationBookmark))
-        screenshotLocationAccessURL = Self.restoreBookmark(defaults.data(forKey: Keys.screenshotLocationBookmark))
+        if Self.isInAppContainer(screenshotDefaults.locationURL) {
+            screenshotDefaults.locationURL = ScreenshotDefaults.defaultLocationURL
+        }
+        destinationURL = Self.restoredUserFolder(forKey: Keys.destinationBookmark)
+        screenshotLocationAccessURL = Self.restoredUserFolder(forKey: Keys.screenshotLocationBookmark)
+        if destinationURL == nil {
+            statusText = String(localized: "Choose an output folder to start")
+        }
     }
 
-    var effectiveDestinationURL: URL {
-        destinationURL ?? screenshotDefaults.locationURL
+    var destinationDisplayText: String {
+        destinationURL?.path ?? String(localized: "No output folder selected")
     }
 
     var startAtLogin: Bool {
@@ -76,13 +82,31 @@ final class SettingsStore: ObservableObject {
         }
     }
 
-    func setDestinationURL(_ url: URL?) {
+    @discardableResult
+    func setDestinationURL(_ url: URL?) -> Bool {
+        if let url, Self.isInAppContainer(url) {
+            statusText = String(localized: "Choose a folder outside the app container")
+            return false
+        }
+
         destinationURL = url
+        statusText = url == nil
+            ? String(localized: "Choose an output folder to start")
+            : String(localized: "Output folder selected")
+        return true
     }
 
-    func setScreenshotLocation(_ url: URL) {
+    @discardableResult
+    func setScreenshotLocation(_ url: URL) -> Bool {
+        guard !Self.isInAppContainer(url) else {
+            statusText = String(localized: "Choose a folder outside the app container")
+            return false
+        }
+
         screenshotDefaults.locationURL = url
         screenshotLocationAccessURL = url
+        statusText = String(localized: "Screenshot folder selected")
+        return true
     }
 
     func applyScreenshotDefaults() {
@@ -91,7 +115,12 @@ final class SettingsStore: ObservableObject {
     }
 
     func openDestinationInFinder() {
-        NSWorkspace.shared.open(effectiveDestinationURL)
+        guard let destinationURL else {
+            statusText = String(localized: "Choose an output folder to start")
+            return
+        }
+
+        NSWorkspace.shared.open(destinationURL)
     }
 
     func setStatus(_ text: String) {
@@ -150,6 +179,28 @@ final class SettingsStore: ObservableObject {
         } catch {
             return nil
         }
+    }
+
+    private static func restoredUserFolder(forKey key: String) -> URL? {
+        guard let url = restoreBookmark(UserDefaults.standard.data(forKey: key)) else {
+            return nil
+        }
+
+        if isInAppContainer(url) {
+            UserDefaults.standard.removeObject(forKey: key)
+            return nil
+        }
+
+        return url
+    }
+
+    private static func isInAppContainer(_ url: URL) -> Bool {
+        let containerURL = FileManager.default.homeDirectoryForCurrentUser.standardizedFileURL
+        let containerPath = containerURL.path
+        guard containerPath.contains("/Library/Containers/") else { return false }
+
+        let path = url.standardizedFileURL.path
+        return path == containerPath || path.hasPrefix(containerPath + "/")
     }
 
     private enum Keys {

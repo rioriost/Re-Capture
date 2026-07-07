@@ -4,7 +4,8 @@ Effective date: July 1, 2026
 
 Re-Capture is a macOS utility that watches the screenshot folder configured by
 macOS, renames screenshots, optionally converts their image format, and moves
-or copies them to a destination folder selected by the user.
+or copies them to a destination folder selected by the user with the standard
+macOS folder picker.
 
 ## Data Collection
 
@@ -20,11 +21,16 @@ Re-Capture stores preferences locally using macOS user defaults. These
 preferences may include the filename template, output format, transfer mode,
 and security-scoped bookmarks for folders selected by the user.
 
+Screenshot output files are not stored in Re-Capture's app sandbox container.
+Re-Capture saves processed screenshots only after the user selects an output
+folder, and saves them to that selected folder.
+
 ## File Access
 
 Re-Capture accesses only folders selected by the user or the screenshot folder
 configured in macOS. Access is used to monitor, rename, convert, move, copy, and
-open screenshots in Finder.
+open screenshots in Finder. If an output folder has not been selected,
+Re-Capture does not save processed screenshot files.
 
 ## Network Access
 

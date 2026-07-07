@@ -76,8 +76,9 @@ struct SettingsView: View {
                         Spacer()
                         Button("Choose") {
                             chooseDirectory { url in
-                                settings.setScreenshotLocation(url)
-                                controller.reconfigure()
+                                if settings.setScreenshotLocation(url) {
+                                    controller.reconfigure()
+                                }
                             }
                         }
                     }
@@ -147,18 +148,22 @@ struct SettingsView: View {
             VStack(alignment: .leading, spacing: 12) {
                 settingsRow("Destination") {
                     HStack {
-                        pathText(settings.effectiveDestinationURL.path)
+                        pathText(settings.destinationDisplayText)
                         Spacer()
                         Button("Choose") {
                             chooseDirectory { settings.setDestinationURL($0) }
                         }
-                        Button("Use screenshot folder") {
-                            settings.setDestinationURL(nil)
-                        }
                         Button("Open in Finder") {
                             settings.openDestinationInFinder()
                         }
+                        .disabled(settings.destinationURL == nil)
                     }
+                }
+
+                settingsRow("") {
+                    Text("Output folder must be selected with the system picker before Re-Capture saves files.")
+                        .foregroundStyle(.secondary)
+                        .font(.callout)
                 }
 
                 settingsRow("Filename template") {
@@ -209,6 +214,7 @@ struct SettingsView: View {
                     Button("Rename/Convert Existing Screenshots") {
                         controller.processBulk()
                     }
+                    .disabled(settings.destinationURL == nil)
                 }
             }
             .padding(10)

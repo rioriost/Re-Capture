@@ -3,6 +3,8 @@
 "Bookmark update failed: %@" = "ブックマークの更新に失敗しました: %@";
 "Cannot read %@" = "%@ を読み込めません";
 "Choose" = "選択";
+"Choose a folder outside the app container" = "アプリコンテナ外のフォルダを選択してください";
+"Choose an output folder to start" = "開始するには出力フォルダを選択してください";
 "Custom" = "カスタム";
 "Date + App" = "日付 + アプリ";
 "Date + App + Title" = "日付 + アプリ + タイトル";
@@ -21,6 +23,7 @@
 "Move" = "移動";
 "Copy" = "コピー";
 "Name prefix" = "名前の接頭辞";
+"No output folder selected" = "出力フォルダ未選択";
 "Off" = "オフ";
 "On" = "オン";
 "Open Destination in Finder" = "保存先をFinderで開く";
@@ -28,6 +31,8 @@
 "Open in Finder" = "Finderで開く";
 "Original" = "元の形式";
 "Output format" = "出力形式";
+"Output folder must be selected with the system picker before Re-Capture saves files." = "Re-Captureがファイルを保存する前に、システムの選択画面で出力フォルダを選択する必要があります。";
+"Output folder selected" = "出力フォルダを選択しました";
 "Pause Recapture" = "Re-Captureを一時停止";
 "Paused" = "一時停止中";
 "Processed %d %@" = "%d件の%@を処理しました";
@@ -37,12 +42,12 @@
 "Save to" = "保存場所";
 "Settings..." = "設定...";
 "Show floating thumbnail" = "フローティングサムネイルを表示";
+"Screenshot folder selected" = "スクリーンショットフォルダを選択しました";
 "Source format" = "元の形式";
 "Template preset" = "テンプレートプリセット";
 "Timestamp" = "タイムスタンプ";
 "Timestamp + Sequence" = "タイムスタンプ + 連番";
 "Transfer" = "転送";
-"Use screenshot folder" = "スクショフォルダを使用";
 "macOS Screenshot Defaults" = "macOSスクリーンショット設定";
 "macOS screenshot settings updated" = "macOSスクリーンショット設定を更新しました";
 "screenshot" = "スクリーンショット";

@@ -26,6 +26,7 @@ struct RecaptureApp: App {
             Button("Open Destination in Finder") {
                 settings.openDestinationInFinder()
             }
+            .disabled(settings.destinationURL == nil)
 
             Divider()
 

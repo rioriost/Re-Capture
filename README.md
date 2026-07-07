@@ -5,7 +5,8 @@ screenshots.
 
 It watches the screenshot directory configured by `com.apple.screencapture`
 with FSEvents, then safely moves or copies new screenshots to a destination
-folder using a configurable filename template and optional image conversion.
+folder selected by the user using the system folder picker, with a configurable
+filename template and optional image conversion.
 
 ## Requirements
 
@@ -17,7 +18,7 @@ folder using a configurable filename template and optional image conversion.
 
 - Uses the native macOS screenshot workflow
 - Watches the configured screenshot folder with FSEvents
-- Moves or copies screenshots to a destination folder
+- Moves or copies screenshots to a user-selected destination folder
 - Configurable filename template, for example `yyyyMMdd-HHmmss`
 - Best-effort `{app}`, `{title}`, and `{sequence}` template tokens
 - Source screenshot formats: PNG, JPEG, PDF, and TIFF
@@ -29,6 +30,16 @@ folder using a configurable filename template and optional image conversion.
 - Bulk rename/convert for existing screenshots
 - Login item toggle
 - Open destination folder in Finder
+
+## File Storage
+
+Re-Capture does not use its app sandbox container for screenshot output. Before
+any screenshot is saved by Re-Capture, the user must choose an output folder with
+the standard macOS folder picker. If no output folder has been selected,
+automatic processing and bulk rename/convert remain inactive.
+
+The macOS screenshot location shown in settings defaults to the user's Desktop
+when the system has no custom screenshot location configured.
 
 ## Filename Templates
 

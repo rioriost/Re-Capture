@@ -22,7 +22,11 @@ final class AppController: ObservableObject {
         guard let settingsStore else { return }
         if settingsStore.isEnabled {
             watcher.start(watching: settingsStore.screenshotDefaults.locationURL)
-            scheduleProcessing()
+            if settingsStore.destinationURL == nil {
+                settingsStore.setStatus(String(localized: "Choose an output folder to start"))
+            } else {
+                scheduleProcessing()
+            }
         } else {
             pendingTask?.cancel()
             watcher.stop()
@@ -44,11 +48,15 @@ final class AppController: ObservableObject {
 
     private func processNow(bulk: Bool) {
         guard let settingsStore, settingsStore.isEnabled || bulk else { return }
+        guard let destinationURL = settingsStore.destinationURL else {
+            settingsStore.setStatus(String(localized: "Choose an output folder to start"))
+            return
+        }
 
         let accessURLs = settingsStore.startAccessingConfiguredDirectories()
         let snapshot = SettingsSnapshot(
             screenshotDefaults: settingsStore.screenshotDefaults,
-            destinationURL: settingsStore.effectiveDestinationURL,
+            destinationURL: destinationURL,
             filenameTemplate: settingsStore.filenameTemplate,
             outputFormat: settingsStore.outputFormat,
             outputQuality: settingsStore.outputQuality,

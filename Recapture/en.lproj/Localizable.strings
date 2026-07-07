@@ -3,6 +3,8 @@
 "Bookmark update failed: %@" = "Bookmark update failed: %@";
 "Cannot read %@" = "Cannot read %@";
 "Choose" = "Choose";
+"Choose a folder outside the app container" = "Choose a folder outside the app container";
+"Choose an output folder to start" = "Choose an output folder to start";
 "Custom" = "Custom";
 "Copy" = "Copy";
 "Date + App" = "Date + App";
@@ -21,6 +23,7 @@
 "Login item update failed: %@" = "Login item update failed: %@";
 "Move" = "Move";
 "Name prefix" = "Name prefix";
+"No output folder selected" = "No output folder selected";
 "Off" = "Off";
 "On" = "On";
 "Open Destination in Finder" = "Open Destination in Finder";
@@ -28,6 +31,8 @@
 "Open in Finder" = "Open in Finder";
 "Original" = "Original";
 "Output format" = "Output format";
+"Output folder must be selected with the system picker before Re-Capture saves files." = "Output folder must be selected with the system picker before Re-Capture saves files.";
+"Output folder selected" = "Output folder selected";
 "Pause Recapture" = "Pause Re-Capture";
 "Paused" = "Paused";
 "Processed %d %@" = "Processed %d %@";
@@ -37,12 +42,12 @@
 "Save to" = "Save to";
 "Settings..." = "Settings...";
 "Show floating thumbnail" = "Show floating thumbnail";
+"Screenshot folder selected" = "Screenshot folder selected";
 "Source format" = "Source format";
 "Template preset" = "Template preset";
 "Timestamp" = "Timestamp";
 "Timestamp + Sequence" = "Timestamp + Sequence";
 "Transfer" = "Transfer";
-"Use screenshot folder" = "Use screenshot folder";
 "macOS Screenshot Defaults" = "macOS Screenshot Defaults";
 "macOS screenshot settings updated" = "macOS screenshot settings updated";
 "screenshot" = "screenshot";
