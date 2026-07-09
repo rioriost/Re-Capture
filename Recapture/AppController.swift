@@ -6,6 +6,7 @@ final class AppController: ObservableObject {
     private let processor = ScreenshotProcessor()
     private let processingQueue = DispatchQueue(label: "st.rio.recapture.processor", qos: .utility)
     private var pendingTask: Task<Void, Never>?
+    private var watcherAccessURLs: [URL] = []
     private weak var settingsStore: SettingsStore?
 
     func bind(to settingsStore: SettingsStore) {
@@ -20,7 +21,9 @@ final class AppController: ObservableObject {
 
     func reconfigure() {
         guard let settingsStore else { return }
+        pendingTask?.cancel()
         if settingsStore.isEnabled {
+            refreshWatcherAccess()
             watcher.start(watching: settingsStore.screenshotDefaults.locationURL)
             if settingsStore.destinationURL == nil {
                 settingsStore.setStatus(String(localized: "Choose an output folder to start"))
@@ -28,8 +31,8 @@ final class AppController: ObservableObject {
                 scheduleProcessing()
             }
         } else {
-            pendingTask?.cancel()
             watcher.stop()
+            stopWatcherAccess()
             settingsStore.setStatus(String(localized: "Paused"))
         }
     }
@@ -70,5 +73,17 @@ final class AppController: ObservableObject {
                 settingsStore.setStatus(result.message)
             }
         }
+    }
+
+    private func refreshWatcherAccess() {
+        let previousAccessURLs = watcherAccessURLs
+        watcherAccessURLs = settingsStore?.startAccessingConfiguredDirectories() ?? []
+        settingsStore?.stopAccessing(previousAccessURLs)
+    }
+
+    private func stopWatcherAccess() {
+        guard !watcherAccessURLs.isEmpty else { return }
+        settingsStore?.stopAccessing(watcherAccessURLs)
+        watcherAccessURLs = []
     }
 }

@@ -9,7 +9,7 @@
 "Date + App" = "日付 + アプリ";
 "Date + App + Title" = "日付 + アプリ + タイトル";
 "Date parts use DateFormatter syntax, then Recapture replaces tokens." = "日付部分はDateFormatterの書式を使い、その後Re-Captureがトークンを置換します。";
-"Destination" = "保存先";
+"Destination" = "出力先";
 "Disable window shadow" = "ウィンドウの影を無効化";
 "Enable Recapture" = "Re-Captureを有効化";
 "Examples: yyyyMMdd-HHmmss, yyyy-MM-dd-HH.mm.ss" = "例: yyyyMMdd-HHmmss, yyyy-MM-dd-HH.mm.ss";

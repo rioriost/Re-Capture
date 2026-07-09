@@ -41,6 +41,12 @@ automatic processing and bulk rename/convert remain inactive.
 The macOS screenshot location shown in settings defaults to the user's Desktop
 when the system has no custom screenshot location configured.
 
+### Release Note
+
+If you installed a previous build, open Re-Capture Settings after updating and
+choose both the macOS screenshot save folder and the Re-Capture output folder
+again.
+
 ## Filename Templates
 
 The template is interpreted as a `DateFormatter` date format first. After date

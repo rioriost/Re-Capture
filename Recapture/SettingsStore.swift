@@ -129,12 +129,17 @@ final class SettingsStore: ObservableObject {
 
     func startAccessingConfiguredDirectories() -> [URL] {
         var urls: [URL] = []
-        if let screenshotLocationAccessURL {
-            urls.append(screenshotLocationAccessURL)
+        var paths: Set<String> = []
+        func appendIfNeeded(_ url: URL?) {
+            guard let url else { return }
+            let path = url.standardizedFileURL.path
+            guard paths.insert(path).inserted else { return }
+            urls.append(url)
         }
-        if let destinationURL, destinationURL != screenshotLocationAccessURL {
-            urls.append(destinationURL)
-        }
+
+        appendIfNeeded(screenshotLocationAccessURL)
+        appendIfNeeded(destinationURL)
+
         for url in urls {
             _ = url.startAccessingSecurityScopedResource()
         }

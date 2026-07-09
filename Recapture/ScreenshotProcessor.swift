@@ -71,11 +71,18 @@ final class ScreenshotProcessor: @unchecked Sendable {
     }
 
     private func isCandidate(sourceURL: URL, name: String, defaults: ScreenshotDefaults) -> Bool {
-        guard sourceExtensions(for: defaults.type).contains(sourceURL.pathExtension.lowercased()) else { return false }
+        let pathExtension = sourceURL.pathExtension.lowercased()
+        guard allSourceExtensions.contains(pathExtension) else { return false }
+        if hasScreenshotMetadata(sourceURL) { return true }
+        guard sourceExtensions(for: defaults.type).contains(pathExtension) else { return false }
         guard name.hasPrefix(defaults.namePrefix + " ") || name.hasPrefix("Screenshot ") || name.hasPrefix("Screen Shot ") else {
             return false
         }
         return true
+    }
+
+    private var allSourceExtensions: Set<String> {
+        ["png", "jpg", "jpeg", "pdf", "tif", "tiff"]
     }
 
     private func sourceExtensions(for type: String) -> Set<String> {
@@ -258,6 +265,13 @@ final class ScreenshotProcessor: @unchecked Sendable {
         return url.withUnsafeFileSystemRepresentation { path in
             guard let path else { return false }
             return getxattr(path, generatedXattrName, nil, 0, 0, 0) >= 0
+        }
+    }
+
+    private func hasScreenshotMetadata(_ url: URL) -> Bool {
+        url.withUnsafeFileSystemRepresentation { path in
+            guard let path else { return false }
+            return getxattr(path, "com.apple.metadata:kMDItemIsScreenCapture", nil, 0, 0, 0) >= 0
         }
     }
 
