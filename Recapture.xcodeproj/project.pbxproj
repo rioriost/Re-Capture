@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0C728BB979C33040E14ED8C6 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C9045D377996B4388E4D15 /* SettingsView.swift */; };
+		2C2CDAB475C23B06A8BDB393 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 846248D60BE5E0160959C5DC /* PrivacyInfo.xcprivacy */; };
 		3837625BA9FED6A02C49C821 /* AppController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0260081E431B470FBA892B7 /* AppController.swift */; };
 		4405DF4E129C447430FE1180 /* SettingsStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4804AD0DD1E14A7DD7A253EE /* SettingsStore.swift */; };
 		57594198E3CB0EDE6DC0F7D6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 66C8997B66C8DF9B54F02A30 /* Localizable.strings */; };
@@ -31,6 +32,7 @@
 		48DCAABF88DF85DE719ABB99 /* ImageConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageConverter.swift; sourceTree = "<group>"; };
 		578195084729FEE0AF05ADD5 /* RecaptureApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecaptureApp.swift; sourceTree = "<group>"; };
 		74FAE9A0D17EF4C67369D82E /* ScreenshotWatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotWatcher.swift; sourceTree = "<group>"; };
+		846248D60BE5E0160959C5DC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		86532FFE3D6885B5CB1D6BB9 /* TemplateRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateRenderer.swift; sourceTree = "<group>"; };
 		86AE290F4902553BFC0921FB /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		C0260081E431B470FBA892B7 /* AppController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppController.swift; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 				48DCAABF88DF85DE719ABB99 /* ImageConverter.swift */,
 				03D8CC8EB5530033E3122D9B /* Info.plist */,
 				86AE290F4902553BFC0921FB /* Models.swift */,
+				846248D60BE5E0160959C5DC /* PrivacyInfo.xcprivacy */,
 				3C5149516AB75E18AC4FC4BF /* Recapture.entitlements */,
 				578195084729FEE0AF05ADD5 /* RecaptureApp.swift */,
 				37AC5E78C6C53AEE2C176882 /* ScreenshotProcessor.swift */,
@@ -154,6 +157,7 @@
 			files = (
 				75E0E475FB3A44E666575B11 /* Assets.xcassets in Resources */,
 				57594198E3CB0EDE6DC0F7D6 /* Localizable.strings in Resources */,
+				2C2CDAB475C23B06A8BDB393 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,14 +201,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Recapture/Recapture.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				INFOPLIST_FILE = Recapture/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = st.rio.recapture;
 				PRODUCT_NAME = "Re-Capture";
 				SDKROOT = macosx;
@@ -340,14 +344,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Recapture/Recapture.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				INFOPLIST_FILE = Recapture/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = st.rio.recapture;
 				PRODUCT_NAME = "Re-Capture";
 				SDKROOT = macosx;
