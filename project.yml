@@ -42,5 +42,5 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: st.rio.recapture
         PRODUCT_NAME: Re-Capture
         MARKETING_VERSION: 1.1.0
-        CURRENT_PROJECT_VERSION: 4
+        CURRENT_PROJECT_VERSION: 5
         MACOSX_DEPLOYMENT_TARGET: "26.0"
