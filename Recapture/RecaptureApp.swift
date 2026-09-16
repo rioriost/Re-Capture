@@ -56,6 +56,8 @@ struct RecaptureApp: App {
                 NSApp.orderFrontStandardAboutPanel(nil)
             }
 
+            Link("Privacy Policy", destination: URL(string: "https://github.com/rioriost/Re-Capture/blob/v1.1.1/PRIVACY.md")!)
+
             Divider()
 
             Button("Quit Recapture") {
