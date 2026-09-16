@@ -1,306 +1,399 @@
 import Foundation
+import ImageIO
 
-final class ScreenshotProcessor: @unchecked Sendable {
-    private var sequence = 1
-    private var processedAutomaticSources: Set<String> = []
-    private var generatedAutomaticFiles: Set<String> = []
-    private let generatedXattrName = "st.rio.recapture.generated"
+protocol ScreenshotProcessing: Sendable {
+    func process(settings: SettingsSnapshot, bulk: Bool, cancellation: ProcessingCancellation) -> ProcessResult
+}
 
-    func process(settings: SettingsSnapshot, bulk: Bool) -> ProcessResult {
-        let fileManager = FileManager.default
-        let sourceDirectory = settings.screenshotDefaults.locationURL
-        let destinationDirectory = settings.destinationURL
+final class ProcessingCancellation: @unchecked Sendable {
+    private let lock = NSLock()
+    private var cancelled = false
 
-        guard let names = try? fileManager.contentsOfDirectory(atPath: sourceDirectory.path) else {
-            return ProcessResult(
-                processed: 0,
-                message: String(
-                    format: String(localized: "Cannot read %@"),
-                    sourceDirectory.path
-                )
-            )
-        }
+    var isCancelled: Bool { lock.withLock { cancelled } }
+    func cancel() { lock.withLock { cancelled = true } }
+}
 
-        var processed = 0
-        var conversionFallbacks = 0
-        for name in names.sorted() {
-            let sourceURL = sourceDirectory.appendingPathComponent(name)
-            guard isCandidate(sourceURL: sourceURL, name: name, defaults: settings.screenshotDefaults) else { continue }
-            if hasGeneratedMarker(sourceURL) { continue }
-            if !bulk, !isStableFile(sourceURL) { continue }
-            guard bulk || shouldProcessAutomatically(sourceURL) else { continue }
-
-            let date = fileDate(sourceURL) ?? Date()
-            let activeWindow = ActiveWindowInfo.current
-            let baseName = TemplateRenderer.render(
-                template: settings.filenameTemplate,
-                date: date,
-                sequence: sequence,
-                activeWindowInfo: activeWindow
-            )
-            sequence += 1
-
-            switch transfer(sourceURL: sourceURL, destinationDirectory: destinationDirectory, baseName: baseName, settings: settings) {
-            case .converted(let destinationURL), .original(let destinationURL):
-                rememberAutomaticSource(sourceURL)
-                rememberGeneratedFile(destinationURL)
-                processed += 1
-            case .fallback(let destinationURL):
-                rememberAutomaticSource(sourceURL)
-                rememberGeneratedFile(destinationURL)
-                processed += 1
-                conversionFallbacks += 1
-            case .failed:
-                break
-            }
-        }
-
-        let noun = processed == 1 ? String(localized: "screenshot") : String(localized: "screenshots")
-        let baseMessage = String(
-            format: String(localized: "Processed %d %@"),
-            processed,
-            noun
-        )
-        let fallbackText = conversionFallbacks > 0
-            ? String(
-                format: String(localized: " (%d saved in original format)"),
-                conversionFallbacks
-            )
-            : ""
-        return ProcessResult(processed: processed, message: baseMessage + fallbackText)
-    }
-
-    private func isCandidate(sourceURL: URL, name: String, defaults: ScreenshotDefaults) -> Bool {
-        let pathExtension = sourceURL.pathExtension.lowercased()
-        guard allSourceExtensions.contains(pathExtension) else { return false }
-        if hasScreenshotMetadata(sourceURL) { return true }
-        guard sourceExtensions(for: defaults.type).contains(pathExtension) else { return false }
-        guard name.hasPrefix(defaults.namePrefix + " ") || name.hasPrefix("Screenshot ") || name.hasPrefix("Screen Shot ") else {
-            return false
-        }
-        return true
-    }
-
-    private var allSourceExtensions: Set<String> {
-        ["png", "jpg", "jpeg", "pdf", "tif", "tiff"]
-    }
-
-    private func sourceExtensions(for type: String) -> Set<String> {
-        switch ScreenshotSourceFormat.fromScreencaptureValue(type) {
-        case .png:
-            ["png"]
-        case .jpeg:
-            ["jpg", "jpeg"]
-        case .pdf:
-            ["pdf"]
-        case .tiff:
-            ["tif", "tiff"]
-        }
-    }
-
-    private func fileDate(_ url: URL) -> Date? {
-        let values = try? url.resourceValues(forKeys: [.creationDateKey, .contentModificationDateKey])
-        return values?.creationDate ?? values?.contentModificationDate
-    }
-
-    private func isStableFile(_ url: URL) -> Bool {
-        guard
-            let values = try? url.resourceValues(forKeys: [.isRegularFileKey, .contentModificationDateKey, .fileSizeKey]),
-            values.isRegularFile == true,
-            let modified = values.contentModificationDate,
-            let firstSize = values.fileSize
-        else {
-            return false
-        }
-
-        guard Date().timeIntervalSince(modified) >= 0.4 else { return false }
-        Thread.sleep(forTimeInterval: 0.2)
-
-        let secondSize = (try? url.resourceValues(forKeys: [.fileSizeKey]))?.fileSize
-        return firstSize == secondSize
-    }
-
-    private func transfer(sourceURL: URL, destinationDirectory: URL, baseName: String, settings: SettingsSnapshot) -> TransferOutcome {
-        let fileManager = FileManager.default
-        if settings.outputFormat != .original, let outputExtension = settings.outputFormat.pathExtension {
-            let destinationURL = uniqueURL(directoryURL: destinationDirectory, baseName: baseName, ext: outputExtension)
-            let temporaryURL = temporaryURL(for: destinationURL)
-            try? fileManager.removeItem(at: temporaryURL)
-
-            if ImageConverter.convert(
-                sourceURL: sourceURL,
-                destinationURL: temporaryURL,
-                outputFormat: settings.outputFormat,
-                quality: settings.outputQuality
-            ), isValidGeneratedFile(temporaryURL) {
-                do {
-                    try fileManager.moveItem(at: temporaryURL, to: destinationURL)
-                } catch {
-                    try? fileManager.removeItem(at: temporaryURL)
-                    return .failed
-                }
-
-                guard isValidGeneratedFile(destinationURL) else {
-                    try? fileManager.removeItem(at: destinationURL)
-                    return .failed
-                }
-
-                if settings.transferMode == .move {
-                    do {
-                        try fileManager.removeItem(at: sourceURL)
-                    } catch {
-                        return .failed
-                    }
-                }
-                markGenerated(destinationURL)
-                return .converted(destinationURL)
-            }
-
-            try? fileManager.removeItem(at: temporaryURL)
-        }
-
-        let destinationURL = uniqueURL(directoryURL: destinationDirectory, baseName: baseName, ext: sourceURL.pathExtension)
-        let temporaryURL = temporaryURL(for: destinationURL)
-        try? fileManager.removeItem(at: temporaryURL)
-
-        do {
-            switch settings.transferMode {
-            case .move:
-                try fileManager.copyItem(at: sourceURL, to: temporaryURL)
-                guard isValidGeneratedFile(temporaryURL) else {
-                    try? fileManager.removeItem(at: temporaryURL)
-                    return .failed
-                }
-                try fileManager.moveItem(at: temporaryURL, to: destinationURL)
-                guard isValidGeneratedFile(destinationURL) else {
-                    try? fileManager.removeItem(at: destinationURL)
-                    return .failed
-                }
-                try fileManager.removeItem(at: sourceURL)
-            case .copy:
-                try fileManager.copyItem(at: sourceURL, to: temporaryURL)
-                guard isValidGeneratedFile(temporaryURL) else {
-                    try? fileManager.removeItem(at: temporaryURL)
-                    return .failed
-                }
-                try fileManager.moveItem(at: temporaryURL, to: destinationURL)
-                guard isValidGeneratedFile(destinationURL) else {
-                    try? fileManager.removeItem(at: destinationURL)
-                    return .failed
-                }
-            }
-            markGenerated(destinationURL)
-            return settings.outputFormat == .original ? .original(destinationURL) : .fallback(destinationURL)
-        } catch {
-            try? fileManager.removeItem(at: temporaryURL)
-            return .failed
-        }
-    }
-
-    private func isValidGeneratedFile(_ url: URL) -> Bool {
-        guard
-            let values = try? url.resourceValues(forKeys: [.isRegularFileKey, .fileSizeKey]),
-            values.isRegularFile == true,
-            let size = values.fileSize
-        else {
-            return false
-        }
-        return size > 0
-    }
-
-    private func temporaryURL(for destinationURL: URL) -> URL {
-        let id = UUID().uuidString
-        let name = ".\(destinationURL.deletingPathExtension().lastPathComponent).\(id).tmp.\(destinationURL.pathExtension)"
-        return destinationURL.deletingLastPathComponent().appendingPathComponent(name)
-    }
-
-    private func uniqueURL(directoryURL: URL, baseName: String, ext: String) -> URL {
-        var candidate = directoryURL.appendingPathComponent("\(baseName).\(ext)")
-        var index = 2
-
-        while FileManager.default.fileExists(atPath: candidate.path) {
-            candidate = directoryURL.appendingPathComponent("\(baseName)-\(index).\(ext)")
-            index += 1
-        }
-
-        return candidate
-    }
-
-    private func shouldProcessAutomatically(_ url: URL) -> Bool {
-        guard let key = fileKey(url) else { return false }
-        return !processedAutomaticSources.contains(key) && !generatedAutomaticFiles.contains(key)
-    }
-
-    private func rememberAutomaticSource(_ url: URL) {
-        guard let key = fileKey(url) else { return }
-        processedAutomaticSources.insert(key)
-    }
-
-    private func rememberGeneratedFile(_ url: URL) {
-        guard let key = fileKey(url) else { return }
-        generatedAutomaticFiles.insert(key)
-    }
-
-    private func fileKey(_ url: URL) -> String? {
-        guard
-            let values = try? url.resourceValues(forKeys: [.contentModificationDateKey, .fileSizeKey]),
-            let modified = values.contentModificationDate,
-            let size = values.fileSize
-        else {
-            return nil
-        }
-
-        return [
-            url.standardizedFileURL.path,
-            String(size),
-            String(modified.timeIntervalSinceReferenceDate)
-        ].joined(separator: "|")
-    }
-
-    private func hasGeneratedMarker(_ url: URL) -> Bool {
-        if let key = fileKey(url), generatedAutomaticFiles.contains(key) {
-            return true
-        }
-
-        return url.withUnsafeFileSystemRepresentation { path in
-            guard let path else { return false }
-            return getxattr(path, generatedXattrName, nil, 0, 0, 0) >= 0
-        }
-    }
-
-    private func hasScreenshotMetadata(_ url: URL) -> Bool {
-        url.withUnsafeFileSystemRepresentation { path in
-            guard let path else { return false }
-            return getxattr(path, "com.apple.metadata:kMDItemIsScreenCapture", nil, 0, 0, 0) >= 0
-        }
-    }
-
-    private func markGenerated(_ url: URL) {
+struct ProcessingFileOperations {
+    var copy: (URL, URL) throws -> Void = { try FileManager.default.copyItem(at: $0, to: $1) }
+    var move: (URL, URL) throws -> Void = { try FileManager.default.moveItem(at: $0, to: $1) }
+    var remove: (URL) throws -> Void = { try FileManager.default.removeItem(at: $0) }
+    var markGenerated: (URL) -> Void = { url in
         var marker: UInt8 = 1
         url.withUnsafeFileSystemRepresentation { path in
             guard let path else { return }
-            _ = setxattr(path, generatedXattrName, &marker, 1, 0, 0)
+            // The journal is authoritative on filesystems without extended attributes.
+            _ = setxattr(path, "st.rio.recapture.generated", &marker, 1, 0, 0)
         }
     }
 }
 
-private enum TransferOutcome {
-    case converted(URL)
-    case original(URL)
-    case fallback(URL)
-    case failed
+final class ScreenshotProcessor: ScreenshotProcessing, @unchecked Sendable {
+    private let lock = NSLock()
+    private let journal: ProcessingJournal
+    private let operations: ProcessingFileOperations
+    private let settleInterval: TimeInterval
+    private let minimumAge: TimeInterval
+    private let activeWindow: () -> ActiveWindowInfo
+
+    init(
+        journalURL: URL = ProcessingJournal.defaultURL,
+        operations: ProcessingFileOperations = ProcessingFileOperations(),
+        settleInterval: TimeInterval = 0.2,
+        minimumAge: TimeInterval = 0.4,
+        activeWindow: @escaping () -> ActiveWindowInfo = { ActiveWindowInfo.current },
+        journalWrite: @escaping (Data, URL) throws -> Void = { try $0.write(to: $1, options: .atomic) }
+    ) {
+        journal = ProcessingJournal(url: journalURL, write: journalWrite)
+        self.operations = operations
+        self.settleInterval = settleInterval
+        self.minimumAge = minimumAge
+        self.activeWindow = activeWindow
+    }
+
+    func process(
+        settings: SettingsSnapshot,
+        bulk: Bool,
+        cancellation: ProcessingCancellation = ProcessingCancellation()
+    ) -> ProcessResult {
+        lock.withLock {
+            processSerially(settings: settings, bulk: bulk, cancellation: cancellation)
+        }
+    }
+
+    private func processSerially(settings: SettingsSnapshot, bulk: Bool, cancellation: ProcessingCancellation) -> ProcessResult {
+        var result = ProcessResult(processed: 0, message: "")
+        var issues: [String] = []
+        var fallbacks = 0
+
+        do {
+            try TemplateRenderer.validate(template: settings.filenameTemplate)
+            var state = try journal.load()
+            let sourceDirectory = settings.screenshotDefaults.locationURL.resolvingSymlinksInPath().standardizedFileURL
+            let files = try FileManager.default.contentsOfDirectory(
+                at: sourceDirectory, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]
+            ).sorted { $0.lastPathComponent < $1.lastPathComponent }
+            let candidates = files.filter {
+                isCandidate($0, defaults: settings.screenshotDefaults)
+                    && (settings.includedSourcePaths?.contains(FileStamp.canonicalPath($0)) ?? true)
+            }
+            guard !cancellation.isCancelled else { return result }
+
+            if state.initializedDirectories.insert(sourceDirectory.path).inserted {
+                if !bulk {
+                    for file in candidates {
+                        let stamp = try FileStamp.read(file)
+                        state.ignoredSources.insert(stamp.key(for: file))
+                    }
+                }
+                try journal.save(state)
+                if !bulk {
+                    result.message = String(localized: "Watching for new screenshots. Use bulk processing for existing files.")
+                    return result
+                }
+            }
+
+            var recovered: Set<String> = []
+            for (key, record) in state.records.sorted(by: { $0.key < $1.key })
+            where !record.committed && record.sourceURL.deletingLastPathComponent().resolvingSymlinksInPath().standardizedFileURL == sourceDirectory {
+                if cancellation.isCancelled { break }
+                if let included = settings.includedSourcePaths, !included.contains(FileStamp.canonicalPath(record.sourceURL)) {
+                    continue
+                }
+                do {
+                    let retained = try finishRecord(key: key, state: &state)
+                    result.processed += 1
+                    if record.fallback { fallbacks += 1 }
+                    if let retained {
+                        result.retained += 1
+                        issues.append("\(record.sourceURL.lastPathComponent): \(retained)")
+                    }
+                } catch {
+                    result.failed += 1
+                    issues.append("\(record.sourceURL.lastPathComponent): \(error.localizedDescription)")
+                    state = try journal.load()
+                }
+                recovered.insert(key)
+            }
+
+            for sourceURL in candidates {
+                if cancellation.isCancelled { break }
+                do {
+                    if !FileManager.default.fileExists(atPath: sourceURL.path) { continue }
+                    let stamp = try FileStamp.read(sourceURL)
+                    let key = stamp.key(for: sourceURL)
+                    if recovered.contains(key) { continue }
+                    if state.generatedFiles.contains(key) || hasGeneratedMarker(sourceURL) { continue }
+                    if let record = state.records[key], !record.committed || record.needsSourceRemoval {
+                        let retained = try finishRecord(key: key, state: &state)
+                        if let retained {
+                            result.retained += 1
+                            issues.append("\(sourceURL.lastPathComponent): \(retained)")
+                        }
+                        continue
+                    }
+                    if !bulk, state.ignoredSources.contains(key) { continue }
+                    if !bulk, state.records[key]?.committed == true { continue }
+
+                    guard stamp.size > 0, Date().timeIntervalSince(stamp.modificationDate) >= minimumAge else {
+                        throw ProcessingError.incomplete
+                    }
+                    Thread.sleep(forTimeInterval: settleInterval)
+                    guard try FileStamp.read(sourceURL) == stamp else { throw ProcessingError.sourceChanged }
+                    if cancellation.isCancelled { break }
+
+                    let date = (try sourceURL.resourceValues(forKeys: [.creationDateKey])).creationDate ?? stamp.modificationDate
+                    let baseName = try TemplateRenderer.render(
+                        template: settings.filenameTemplate,
+                        date: date,
+                        sequence: state.sequence,
+                        activeWindowInfo: activeWindow()
+                    )
+                    let record = try prepareTransfer(
+                        sourceURL: sourceURL, stamp: stamp, baseName: baseName, settings: settings
+                    )
+                    state.records[key] = record
+                    state.generatedFiles.insert(record.outputStamp.key(for: record.destinationURL))
+                    state.sequence += 1
+                    do {
+                        // Persist the intended output before publishing it, so restart recovery cannot duplicate it.
+                        try journal.save(state)
+                    } catch {
+                        try operations.remove(record.stagingURL)
+                        throw error
+                    }
+                    let retained = try finishRecord(key: key, state: &state)
+                    result.processed += 1
+                    if record.fallback { fallbacks += 1 }
+                    if let retained {
+                        result.retained += 1
+                        issues.append("\(sourceURL.lastPathComponent): \(retained)")
+                    }
+                } catch ProcessingError.incomplete {
+                    result.deferred += 1
+                    result.retrySuggested = true
+                    result.retrySourcePaths.insert(FileStamp.canonicalPath(sourceURL))
+                    issues.append("\(sourceURL.lastPathComponent): \(ProcessingError.incomplete.localizedDescription)")
+                } catch ProcessingError.sourceChanged {
+                    result.deferred += 1
+                    result.retrySuggested = true
+                    result.retrySourcePaths.insert(FileStamp.canonicalPath(sourceURL))
+                    issues.append("\(sourceURL.lastPathComponent): \(ProcessingError.sourceChanged.localizedDescription)")
+                } catch {
+                    result.failed += 1
+                    issues.append("\(sourceURL.lastPathComponent): \(error.localizedDescription)")
+                    // Reload durable state after any failed operation before processing another file.
+                    state = try journal.load()
+                }
+            }
+        } catch {
+            result.failed += 1
+            issues.append(error.localizedDescription)
+        }
+
+        result.message = resultMessage(result, fallbacks: fallbacks, issues: issues)
+        return result
+    }
+
+    private func prepareTransfer(
+        sourceURL: URL, stamp: FileStamp, baseName: String, settings: SettingsSnapshot
+    ) throws -> TransferRecord {
+        let snapshot = temporaryURL(directory: settings.destinationURL, ext: sourceURL.pathExtension)
+        var output = snapshot
+        do {
+            try operations.copy(sourceURL, snapshot)
+            guard try FileStamp.read(sourceURL) == stamp else { throw ProcessingError.sourceChanged }
+            guard try Self.isCompleteImage(snapshot) else { throw ProcessingError.incomplete }
+
+            var fallback = false
+            if settings.outputFormat != .original, let ext = settings.outputFormat.pathExtension {
+                let converted = temporaryURL(directory: settings.destinationURL, ext: ext)
+                do {
+                    if try ImageConverter.convert(
+                        sourceURL: snapshot, destinationURL: converted,
+                        outputFormat: settings.outputFormat, quality: settings.outputQuality
+                    ), try Self.isCompleteImage(converted) {
+                        output = converted
+                        try operations.remove(snapshot)
+                    } else {
+                        if FileManager.default.fileExists(atPath: converted.path) { try operations.remove(converted) }
+                        fallback = true
+                    }
+                } catch {
+                    if FileManager.default.fileExists(atPath: converted.path) { try operations.remove(converted) }
+                    throw error
+                }
+            }
+            guard try FileStamp.read(sourceURL) == stamp else { throw ProcessingError.sourceChanged }
+            let destination = try uniqueURL(
+                directory: settings.destinationURL, baseName: baseName, ext: output.pathExtension
+            )
+            return TransferRecord(
+                sourcePath: sourceURL.path, sourceStamp: stamp,
+                destinationPath: destination.path, stagingPath: output.path,
+                outputStamp: try FileStamp.read(output), committed: false,
+                needsSourceRemoval: settings.transferMode == .move, fallback: fallback
+            )
+        } catch {
+            if FileManager.default.fileExists(atPath: snapshot.path) { try operations.remove(snapshot) }
+            if output != snapshot, FileManager.default.fileExists(atPath: output.path) { try operations.remove(output) }
+            throw error
+        }
+    }
+
+    private func finishRecord(key: String, state: inout ProcessingJournal.State) throws -> String? {
+        guard var record = state.records[key] else { return nil }
+        if !record.committed {
+            if !FileManager.default.fileExists(atPath: record.destinationPath) {
+                guard try FileStamp.read(record.stagingURL) == record.outputStamp,
+                      try Self.isCompleteImage(record.stagingURL) else {
+                    throw ProcessingError.outputChanged
+                }
+                try operations.move(record.stagingURL, record.destinationURL)
+            }
+            guard try FileStamp.read(record.destinationURL) == record.outputStamp else {
+                throw ProcessingError.outputChanged
+            }
+            operations.markGenerated(record.destinationURL)
+            record.committed = true
+            state.records[key] = record
+            try journal.save(state)
+        }
+
+        guard record.needsSourceRemoval else { return nil }
+        do {
+            guard try FileStamp.read(record.destinationURL) == record.outputStamp,
+                  try Self.isCompleteImage(record.destinationURL) else {
+                throw ProcessingError.outputChanged
+            }
+            do {
+                guard try FileStamp.read(record.sourceURL) == record.sourceStamp else {
+                    throw ProcessingError.sourceChanged
+                }
+                try operations.remove(record.sourceURL)
+            } catch let error as NSError where error.domain == NSPOSIXErrorDomain && error.code == Int(ENOENT) {
+                // A crash may occur after removal but before the completed journal write.
+            }
+        } catch {
+            return error.localizedDescription
+        }
+        record.needsSourceRemoval = false
+        state.records[key] = record
+        try journal.save(state)
+        return nil
+    }
+
+    private func isCandidate(_ url: URL, defaults: ScreenshotDefaults) -> Bool {
+        let ext = url.pathExtension.lowercased()
+        guard ["png", "jpg", "jpeg", "pdf", "tif", "tiff"].contains(ext) else { return false }
+        var directory: ObjCBool = false
+        guard FileManager.default.fileExists(atPath: url.path, isDirectory: &directory), !directory.boolValue else { return false }
+        if hasAttribute("com.apple.metadata:kMDItemIsScreenCapture", at: url) { return true }
+        let extensions: [String]
+        switch ScreenshotSourceFormat.fromScreencaptureValue(defaults.type) {
+        case .png: extensions = ["png"]
+        case .jpeg: extensions = ["jpg", "jpeg"]
+        case .pdf: extensions = ["pdf"]
+        case .tiff: extensions = ["tif", "tiff"]
+        }
+        guard extensions.contains(ext) else { return false }
+        let stem = url.deletingPathExtension().lastPathComponent
+        return [defaults.namePrefix, "Screenshot", "Screen Shot"].contains {
+            !$0.isEmpty && (stem == $0 || stem.hasPrefix($0 + " "))
+        }
+    }
+
+    static func isCompleteImage(_ url: URL) throws -> Bool {
+        let data = try Data(contentsOf: url)
+        let ext = url.pathExtension.lowercased()
+        // ImageIO can decode PNG/JPEG pixels successfully before their final marker arrives.
+        if ext == "png",
+           !data.suffix(12).elementsEqual([0, 0, 0, 0, 73, 69, 78, 68, 174, 66, 96, 130]) {
+            return false
+        }
+        if ["jpg", "jpeg"].contains(ext), !data.suffix(2).elementsEqual([255, 217]) {
+            return false
+        }
+        if ext == "webp" {
+            guard data.count >= 12 else { return false }
+            let declaredSize = (0..<4).reduce(UInt64(0)) { $0 | (UInt64(data[4 + $1]) << (8 * $1)) }
+            guard declaredSize + 8 == UInt64(data.count) else { return false }
+        }
+        if ext == "pdf" {
+            guard let trailer = String(data: data.suffix(32), encoding: .ascii),
+                  trailer.trimmingCharacters(in: .whitespacesAndNewlines).hasSuffix("%%EOF"),
+                  let provider = CGDataProvider(data: data as CFData),
+                  let document = CGPDFDocument(provider), document.isUnlocked, document.numberOfPages > 0 else {
+                return false
+            }
+            return (1...document.numberOfPages).allSatisfy { document.page(at: $0) != nil }
+        }
+        guard let source = CGImageSourceCreateWithData(data as CFData, nil),
+              CGImageSourceGetStatus(source) == .statusComplete,
+              CGImageSourceGetCount(source) > 0 else { return false }
+        return (0..<CGImageSourceGetCount(source)).allSatisfy { index in
+            CGImageSourceCreateImageAtIndex(
+                source, index, [kCGImageSourceShouldCacheImmediately: true] as CFDictionary
+            ) != nil && CGImageSourceGetStatusAtIndex(source, index) == .statusComplete
+        }
+    }
+
+    private func hasAttribute(_ name: String, at url: URL) -> Bool {
+        url.withUnsafeFileSystemRepresentation { path in
+            guard let path else { return false }
+            return getxattr(path, name, nil, 0, 0, 0) >= 0
+        }
+    }
+
+    private func hasGeneratedMarker(_ url: URL) -> Bool {
+        hasAttribute("st.rio.recapture.generated", at: url)
+    }
+
+    private func temporaryURL(directory: URL, ext: String) -> URL {
+        directory.appendingPathComponent(".\(UUID().uuidString).tmp.\(ext)")
+    }
+
+    private func uniqueURL(directory: URL, baseName: String, ext: String) throws -> URL {
+        var index = 1
+        while true {
+            let suffix = index == 1 ? "" : "-\(index)"
+            let name = "\(baseName)\(suffix).\(ext)"
+            guard name.utf8.count <= 255 else { throw FilenameError.tooLong }
+            let candidate = directory.appendingPathComponent(name)
+            if !FileManager.default.fileExists(atPath: candidate.path) { return candidate }
+            index += 1
+        }
+    }
+
+    private func resultMessage(_ result: ProcessResult, fallbacks: Int, issues: [String]) -> String {
+        let noun = result.processed == 1 ? String(localized: "screenshot") : String(localized: "screenshots")
+        var message = String(format: String(localized: "Processed %d %@"), result.processed, noun)
+        if fallbacks > 0 {
+            message += String(format: String(localized: " (%d saved in original format)"), fallbacks)
+        }
+        if result.failed > 0 { message += String(format: String(localized: "; %d failed"), result.failed) }
+        if result.deferred > 0 { message += String(format: String(localized: "; %d deferred"), result.deferred) }
+        if result.retained > 0 { message += String(format: String(localized: "; %d originals retained"), result.retained) }
+        if !issues.isEmpty { message += ": " + issues.joined(separator: "; ") }
+        return message
+    }
 }
 
-struct SettingsSnapshot {
+struct SettingsSnapshot: Equatable, Sendable {
     var screenshotDefaults: ScreenshotDefaults
     var destinationURL: URL
     var filenameTemplate: String
     var outputFormat: OutputFormat
     var outputQuality: Int
     var transferMode: TransferMode
+    var includedSourcePaths: Set<String>? = nil
 }
 
-struct ProcessResult {
+struct ProcessResult: Sendable {
     var processed: Int
     var message: String
+    var failed = 0
+    var deferred = 0
+    var retained = 0
+    var retrySuggested = false
+    var retrySourcePaths: Set<String> = []
 }

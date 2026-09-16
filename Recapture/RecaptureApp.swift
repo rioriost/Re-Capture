@@ -9,9 +9,24 @@ struct RecaptureApp: App {
     @Environment(\.openSettings) private var openSettings
 
     init() {
-        let settings = SettingsStore()
+        let settings: SettingsStore
         let controller = AppController()
-        controller.bind(to: settings)
+        if ProcessInfo.processInfo.environment["RECAPTURE_TESTING"] == "1" {
+            let suiteName = "st.rio.recapture.tests.host"
+            let defaults = UserDefaults(suiteName: suiteName)!
+            defaults.removePersistentDomain(forName: suiteName)
+            settings = SettingsStore(
+                defaults: defaults,
+                preferences: ScreenshotPreferences(
+                    sandboxStatus: { .enabled },
+                    read: { .fallback },
+                    write: { _ in throw ScreenshotPreferencesError.sandboxed }
+                )
+            )
+        } else {
+            settings = SettingsStore()
+            controller.bind(to: settings)
+        }
         _settings = StateObject(wrappedValue: settings)
         _controller = StateObject(wrappedValue: controller)
     }
@@ -20,7 +35,6 @@ struct RecaptureApp: App {
         MenuBarExtra {
             Button(settings.isEnabled ? String(localized: "Pause Recapture") : String(localized: "Enable Recapture")) {
                 settings.isEnabled.toggle()
-                controller.reconfigure()
             }
 
             Button("Open Destination in Finder") {
@@ -55,13 +69,7 @@ struct RecaptureApp: App {
             }
             .foregroundStyle(settings.isEnabled ? .green : .red)
         }
-        .onChange(of: settings.screenshotDefaults) { _, _ in
-            controller.reconfigure()
-        }
-        .onChange(of: settings.destinationURL) { _, _ in
-            controller.reconfigure()
-        }
-        .onChange(of: settings.outputFormat) { _, _ in
+        .onChange(of: settings.processingConfiguration) { _, _ in
             controller.reconfigure()
         }
 

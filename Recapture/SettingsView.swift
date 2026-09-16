@@ -21,21 +21,26 @@ struct SettingsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            generalSection
-            screenshotSection
-            outputSection
+            ScrollView {
+                VStack(alignment: .leading, spacing: 14) {
+                    generalSection
+                    screenshotSection
+                    outputSection
+                }
+            }
 
             HStack {
                 Text(settings.statusText)
                     .foregroundStyle(.secondary)
-                    .lineLimit(1)
-                    .truncationMode(.middle)
+                    .lineLimit(3)
+                    .help(settings.statusText)
+                    .textSelection(.enabled)
                 Spacer()
             }
             .font(.callout)
         }
         .padding(20)
-        .frame(width: 880, height: 620)
+        .frame(width: 880, height: 760)
     }
 
     private var generalSection: some View {
@@ -44,7 +49,6 @@ struct SettingsView: View {
                 HStack(spacing: 18) {
                     Toggle("Enable Recapture", isOn: $settings.isEnabled)
                         .toggleStyle(.switch)
-                        .onChange(of: settings.isEnabled) { _, _ in controller.reconfigure() }
 
                     Toggle("Open at login", isOn: Binding(
                         get: { settings.startAtLogin },
@@ -70,76 +74,94 @@ struct SettingsView: View {
     private var screenshotSection: some View {
         sectionBox("macOS Screenshot Defaults") {
             VStack(alignment: .leading, spacing: 12) {
-                settingsRow("Save to") {
+                settingsRow("Watched folder") {
                     HStack {
-                        pathText(settings.screenshotDefaults.locationURL.path)
+                        pathText(settings.screenshotLocationDisplayText)
                         Spacer()
                         Button("Choose") {
-                            chooseDirectory { url in
-                                if settings.setScreenshotLocation(url) {
-                                    controller.reconfigure()
-                                }
-                            }
+                            chooseDirectory { settings.setScreenshotLocation($0) }
                         }
                     }
                 }
 
-                settingsRow("Name prefix") {
-                    TextField("Name prefix", text: Binding(
-                        get: { settings.screenshotDefaults.namePrefix },
-                        set: { settings.screenshotDefaults.namePrefix = $0 }
-                    ))
-                    .frame(width: 260)
-                }
+                Text("Choose the same folder as Screenshot’s Options > Save to. This selection only controls Re-Capture and does not change macOS settings.")
+                    .foregroundStyle(.secondary)
+                    .font(.callout)
 
-                settingsRow("Source format") {
-                    Picker("Source format", selection: Binding(
-                        get: { ScreenshotSourceFormat.fromScreencaptureValue(settings.screenshotDefaults.type) },
-                        set: { settings.screenshotDefaults.type = $0.screencaptureValue }
-                    )) {
-                        ForEach(ScreenshotSourceFormat.allCases) { format in
-                            Text(format.title).tag(format)
-                        }
-                    }
-                    .labelsHidden()
-                    .frame(width: 260, alignment: .leading)
-                }
-
-                settingsRow("") {
-                    HStack(spacing: 24) {
-                        Toggle("Include date in filename", isOn: Binding(
-                            get: { settings.screenshotDefaults.includeDate },
-                            set: { settings.screenshotDefaults.includeDate = $0 }
-                        ))
-                        Toggle("Disable window shadow", isOn: Binding(
-                            get: { settings.screenshotDefaults.disableShadow },
-                            set: { settings.screenshotDefaults.disableShadow = $0 }
-                        ))
-                    }
-                }
-
-                settingsRow("") {
-                    HStack(spacing: 24) {
-                        Toggle("Show floating thumbnail", isOn: Binding(
-                            get: { settings.screenshotDefaults.showThumbnail },
-                            set: { settings.screenshotDefaults.showThumbnail = $0 }
-                        ))
-                        Toggle("Include mouse pointer", isOn: Binding(
-                            get: { settings.screenshotDefaults.captureMousePointer },
-                            set: { settings.screenshotDefaults.captureMousePointer = $0 }
-                        ))
-                    }
+                if settings.canApplyScreenshotDefaults {
+                    screenshotDefaultsEditor
+                } else {
+                    Text("Direct changes to macOS defaults are unavailable. Use Screenshot (Shift-Command-5).")
+                        .foregroundStyle(.secondary)
+                        .font(.callout)
                 }
 
                 HStack {
+                    Button("Open Screenshot") {
+                        settings.openScreenshotSettings()
+                    }
+                    Button("Refresh macOS Defaults") {
+                        settings.refreshScreenshotDefaults()
+                    }
                     Spacer()
-                    Button("Apply to macOS") {
-                        settings.applyScreenshotDefaults()
-                        controller.reconfigure()
+                    if settings.canApplyScreenshotDefaults {
+                        Button("Apply to macOS") {
+                            settings.applyScreenshotDefaults()
+                        }
+                    }
+                }
+
+                Text("Refreshing replaces unapplied edits but keeps your watched folder.")
+                    .foregroundStyle(.secondary)
+                    .font(.callout)
+            }
+            .padding(10)
+        }
+    }
+
+    private var screenshotDefaultsEditor: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            settingsRow("Save to") {
+                HStack {
+                    pathText(settings.screenshotDefaultsDraft.locationURL.path)
+                    Spacer()
+                    Button("Choose") {
+                        chooseDirectory { settings.screenshotDefaultsDraft.locationURL = $0 }
                     }
                 }
             }
-            .padding(10)
+
+            settingsRow("Name prefix") {
+                TextField("Name prefix", text: $settings.screenshotDefaultsDraft.namePrefix)
+                    .frame(width: 260)
+            }
+
+            settingsRow("Source format") {
+                Picker("Source format", selection: Binding(
+                    get: { ScreenshotSourceFormat.fromScreencaptureValue(settings.screenshotDefaultsDraft.type) },
+                    set: { settings.screenshotDefaultsDraft.type = $0.screencaptureValue }
+                )) {
+                    ForEach(ScreenshotSourceFormat.allCases) { format in
+                        Text(format.title).tag(format)
+                    }
+                }
+                .labelsHidden()
+                .frame(width: 260, alignment: .leading)
+            }
+
+            settingsRow("") {
+                HStack(spacing: 24) {
+                    Toggle("Include date in filename", isOn: $settings.screenshotDefaultsDraft.includeDate)
+                    Toggle("Disable window shadow", isOn: $settings.screenshotDefaultsDraft.disableShadow)
+                }
+            }
+
+            settingsRow("") {
+                HStack(spacing: 24) {
+                    Toggle("Show floating thumbnail", isOn: $settings.screenshotDefaultsDraft.showThumbnail)
+                    Toggle("Include mouse pointer", isOn: $settings.screenshotDefaultsDraft.captureMousePointer)
+                }
+            }
         }
     }
 
@@ -192,6 +214,14 @@ struct SettingsView: View {
                     }
                 }
 
+                if let templateValidationError {
+                    settingsRow("") {
+                        Text(templateValidationError)
+                            .foregroundStyle(.red)
+                            .font(.callout)
+                    }
+                }
+
                 settingsRow("Output format") {
                     HStack {
                         Picker("Output format", selection: $settings.outputFormat) {
@@ -214,10 +244,19 @@ struct SettingsView: View {
                     Button("Rename/Convert Existing Screenshots") {
                         controller.processBulk()
                     }
-                    .disabled(settings.destinationURL == nil)
+                    .disabled(settings.snapshot == nil || templateValidationError != nil)
                 }
             }
             .padding(10)
+        }
+    }
+
+    private var templateValidationError: String? {
+        do {
+            try TemplateRenderer.validate(template: settings.filenameTemplate)
+            return nil
+        } catch {
+            return error.localizedDescription
         }
     }
 

@@ -1,9 +1,9 @@
 # Privacy Policy
 
-Effective date: July 1, 2026
+Effective date: September 16, 2026
 
-Re-Capture is a macOS utility that watches the screenshot folder configured by
-macOS, renames screenshots, optionally converts their image format, and moves
+Re-Capture is a macOS utility that watches a screenshot folder selected by the
+user, renames screenshots, optionally converts their image format, and moves
 or copies them to a destination folder selected by the user with the standard
 macOS folder picker.
 
@@ -21,15 +21,24 @@ Re-Capture stores preferences locally using macOS user defaults. These
 preferences may include the filename template, output format, transfer mode,
 and security-scoped bookmarks for folders selected by the user.
 
+Re-Capture also keeps a local processing journal in its Application Support
+directory (inside its sandbox container in sandboxed builds). It records input
+and output paths, file identifiers, sizes, modification timestamps, processing
+sequence numbers, the initial folder inventory, and transfer/recovery state.
+The journal contains no screenshot image data and is not transmitted. Records
+are retained until the app's local data is removed, so restarting or recovering
+an interrupted transfer does not duplicate output. Removing this history resets
+the initial inventory and duplicate protection.
+
 Screenshot output files are not stored in Re-Capture's app sandbox container.
 Re-Capture saves processed screenshots only after the user selects an output
 folder, and saves them to that selected folder.
 
 ## File Access
 
-Re-Capture accesses only folders selected by the user or the screenshot folder
-configured in macOS. Access is used to monitor, rename, convert, move, copy, and
-open screenshots in Finder. If an output folder has not been selected,
+Re-Capture accesses screenshot files only in folders selected by the user.
+Access is used to monitor, rename, convert, move, copy, and
+open screenshots in Finder. If a watched or output folder has not been selected,
 Re-Capture does not save processed screenshot files.
 
 ## Network Access

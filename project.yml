@@ -41,6 +41,31 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         PRODUCT_BUNDLE_IDENTIFIER: st.rio.recapture
         PRODUCT_NAME: Re-Capture
-        MARKETING_VERSION: 1.1.0
-        CURRENT_PROJECT_VERSION: 5
+        PRODUCT_MODULE_NAME: Recapture
+        MARKETING_VERSION: 1.1.1
+        CURRENT_PROJECT_VERSION: 6
         MACOSX_DEPLOYMENT_TARGET: "26.0"
+  RecaptureTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: RecaptureTests
+    dependencies:
+      - target: Recapture
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: st.rio.recapture.tests
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Re-Capture.app/Contents/MacOS/Re-Capture"
+        BUNDLE_LOADER: "$(TEST_HOST)"
+schemes:
+  Recapture:
+    build:
+      targets:
+        Recapture: all
+        RecaptureTests: [test]
+    test:
+      targets:
+        - RecaptureTests
+      environmentVariables:
+        RECAPTURE_TESTING: "1"

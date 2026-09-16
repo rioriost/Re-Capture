@@ -16,26 +16,47 @@
 		75E0E475FB3A44E666575B11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F7D527DDC9C09D5F58094301 /* Assets.xcassets */; };
 		7ED5866EB770B9EB025D7245 /* ScreenshotWatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FAE9A0D17EF4C67369D82E /* ScreenshotWatcher.swift */; };
 		8753481A0E5D305DB0A4FC28 /* RecaptureApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578195084729FEE0AF05ADD5 /* RecaptureApp.swift */; };
+		B3106956016CA8372B7681A8 /* AppControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BDF963BD9B31871414D4886 /* AppControllerTests.swift */; };
+		B83ACB28B1260ADD5A0584A3 /* ProcessingJournal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E9F1CCE196F3DFA8CE92B7 /* ProcessingJournal.swift */; };
 		C0117D363CDBADCCA8870E41 /* TemplateRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86532FFE3D6885B5CB1D6BB9 /* TemplateRenderer.swift */; };
+		CC9E6AD16CA2870CB04EBADE /* SettingsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247AB53A5F5CE4CDF443B394 /* SettingsStoreTests.swift */; };
 		E1BFC9D697C1715DB6340C98 /* ImageConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DCAABF88DF85DE719ABB99 /* ImageConverter.swift */; };
 		E746EA5F8494AD821942525E /* ScreenshotProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37AC5E78C6C53AEE2C176882 /* ScreenshotProcessor.swift */; };
+		F22DC1B22A54933B843606AD /* TemplateRendererTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FA8C6A22CF37F5145D2C37 /* TemplateRendererTests.swift */; };
+		F90308A3D49035E895AB8809 /* ScreenshotProcessorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 003F8F9C5E68E82B9216EE4E /* ScreenshotProcessorTests.swift */; };
 		FE2FE7D01DCB54D02D6527B6 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AE290F4902553BFC0921FB /* Models.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		2455702F3536B68D2EAC578B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 346D5B8521B02EC8CE5DD45B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F6EC5353220F4E1E65566EC5;
+			remoteInfo = Recapture;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		003F8F9C5E68E82B9216EE4E /* ScreenshotProcessorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotProcessorTests.swift; sourceTree = "<group>"; };
 		00791F0598081B71AE6F1976 /* Recapture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Recapture.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03D8CC8EB5530033E3122D9B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		1D720DD1BEBCCBFFAA2D2D7D /* RecaptureTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RecaptureTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		247AB53A5F5CE4CDF443B394 /* SettingsStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStoreTests.swift; sourceTree = "<group>"; };
 		32C9045D377996B4388E4D15 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		37AC5E78C6C53AEE2C176882 /* ScreenshotProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotProcessor.swift; sourceTree = "<group>"; };
 		3C5149516AB75E18AC4FC4BF /* Recapture.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Recapture.entitlements; sourceTree = "<group>"; };
 		4804AD0DD1E14A7DD7A253EE /* SettingsStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStore.swift; sourceTree = "<group>"; };
 		48DCAABF88DF85DE719ABB99 /* ImageConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageConverter.swift; sourceTree = "<group>"; };
 		578195084729FEE0AF05ADD5 /* RecaptureApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecaptureApp.swift; sourceTree = "<group>"; };
+		5BDF963BD9B31871414D4886 /* AppControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppControllerTests.swift; sourceTree = "<group>"; };
 		74FAE9A0D17EF4C67369D82E /* ScreenshotWatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotWatcher.swift; sourceTree = "<group>"; };
+		76FA8C6A22CF37F5145D2C37 /* TemplateRendererTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateRendererTests.swift; sourceTree = "<group>"; };
 		846248D60BE5E0160959C5DC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		86532FFE3D6885B5CB1D6BB9 /* TemplateRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateRenderer.swift; sourceTree = "<group>"; };
 		86AE290F4902553BFC0921FB /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		C0260081E431B470FBA892B7 /* AppController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppController.swift; sourceTree = "<group>"; };
+		C4E9F1CCE196F3DFA8CE92B7 /* ProcessingJournal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingJournal.swift; sourceTree = "<group>"; };
 		F503470E4C4062B9D5837315 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F7A94619C908B85A6331DE1B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F7D527DDC9C09D5F58094301 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -57,14 +78,27 @@
 			isa = PBXGroup;
 			children = (
 				00791F0598081B71AE6F1976 /* Recapture.app */,
+				1D720DD1BEBCCBFFAA2D2D7D /* RecaptureTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		82DD0870BB2ECB5ABA9FF69D /* RecaptureTests */ = {
+			isa = PBXGroup;
+			children = (
+				5BDF963BD9B31871414D4886 /* AppControllerTests.swift */,
+				003F8F9C5E68E82B9216EE4E /* ScreenshotProcessorTests.swift */,
+				247AB53A5F5CE4CDF443B394 /* SettingsStoreTests.swift */,
+				76FA8C6A22CF37F5145D2C37 /* TemplateRendererTests.swift */,
+			);
+			path = RecaptureTests;
 			sourceTree = "<group>";
 		};
 		88C793A865B25793EFC53B52 = {
 			isa = PBXGroup;
 			children = (
 				91EC7CD198CB73AB94F355E3 /* Recapture */,
+				82DD0870BB2ECB5ABA9FF69D /* RecaptureTests */,
 				1D88B801BEAA18E2B291D077 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -78,6 +112,7 @@
 				03D8CC8EB5530033E3122D9B /* Info.plist */,
 				86AE290F4902553BFC0921FB /* Models.swift */,
 				846248D60BE5E0160959C5DC /* PrivacyInfo.xcprivacy */,
+				C4E9F1CCE196F3DFA8CE92B7 /* ProcessingJournal.swift */,
 				3C5149516AB75E18AC4FC4BF /* Recapture.entitlements */,
 				578195084729FEE0AF05ADD5 /* RecaptureApp.swift */,
 				37AC5E78C6C53AEE2C176882 /* ScreenshotProcessor.swift */,
@@ -93,6 +128,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		90B6632DA06A2D0B18F22E14 /* RecaptureTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1FC3A742971953119AECB9A3 /* Build configuration list for PBXNativeTarget "RecaptureTests" */;
+			buildPhases = (
+				1DFA7A1397B4A97C13DF6769 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C9BEE9406C2E73A8167852AD /* PBXTargetDependency */,
+			);
+			name = RecaptureTests;
+			packageProductDependencies = (
+			);
+			productName = RecaptureTests;
+			productReference = 1D720DD1BEBCCBFFAA2D2D7D /* RecaptureTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		F6EC5353220F4E1E65566EC5 /* Recapture */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02554F6C08F2409CC9A68704 /* Build configuration list for PBXNativeTarget "Recapture" */;
@@ -122,6 +175,9 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					90B6632DA06A2D0B18F22E14 = {
+						ProvisioningStyle = Automatic;
+					};
 					F6EC5353220F4E1E65566EC5 = {
 						ProvisioningStyle = Automatic;
 					};
@@ -146,6 +202,7 @@
 			projectRoot = "";
 			targets = (
 				F6EC5353220F4E1E65566EC5 /* Recapture */,
+				90B6632DA06A2D0B18F22E14 /* RecaptureTests */,
 			);
 		};
 /* End PBXProject section */
@@ -171,6 +228,7 @@
 				3837625BA9FED6A02C49C821 /* AppController.swift in Sources */,
 				E1BFC9D697C1715DB6340C98 /* ImageConverter.swift in Sources */,
 				FE2FE7D01DCB54D02D6527B6 /* Models.swift in Sources */,
+				B83ACB28B1260ADD5A0584A3 /* ProcessingJournal.swift in Sources */,
 				8753481A0E5D305DB0A4FC28 /* RecaptureApp.swift in Sources */,
 				E746EA5F8494AD821942525E /* ScreenshotProcessor.swift in Sources */,
 				7ED5866EB770B9EB025D7245 /* ScreenshotWatcher.swift in Sources */,
@@ -180,7 +238,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		1DFA7A1397B4A97C13DF6769 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B3106956016CA8372B7681A8 /* AppControllerTests.swift in Sources */,
+				F90308A3D49035E895AB8809 /* ScreenshotProcessorTests.swift in Sources */,
+				CC9E6AD16CA2870CB04EBADE /* SettingsStoreTests.swift in Sources */,
+				F22DC1B22A54933B843606AD /* TemplateRendererTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C9BEE9406C2E73A8167852AD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F6EC5353220F4E1E65566EC5 /* Recapture */;
+			targetProxy = 2455702F3536B68D2EAC578B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		66C8997B66C8DF9B54F02A30 /* Localizable.strings */ = {
@@ -201,15 +278,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Recapture/Recapture.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				INFOPLIST_FILE = Recapture/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = st.rio.recapture;
+				PRODUCT_MODULE_NAME = Recapture;
 				PRODUCT_NAME = "Re-Capture";
 				SDKROOT = macosx;
 			};
@@ -272,6 +350,40 @@
 				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
+		};
+		2FF6031AE3B0D8139D481833 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = st.rio.recapture.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Re-Capture.app/Contents/MacOS/Re-Capture";
+			};
+			name = Release;
+		};
+		31418FA0D938885C3B133314 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = st.rio.recapture.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Re-Capture.app/Contents/MacOS/Re-Capture";
+			};
+			name = Debug;
 		};
 		B4910716405FB649C5AA9E53 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -344,15 +456,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Recapture/Recapture.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				INFOPLIST_FILE = Recapture/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = st.rio.recapture;
+				PRODUCT_MODULE_NAME = Recapture;
 				PRODUCT_NAME = "Re-Capture";
 				SDKROOT = macosx;
 			};
@@ -366,6 +479,15 @@
 			buildConfigurations = (
 				EA69FD80AC46726846BE5BA6 /* Debug */,
 				22164CCE1826A98AE299BD78 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		1FC3A742971953119AECB9A3 /* Build configuration list for PBXNativeTarget "RecaptureTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				31418FA0D938885C3B133314 /* Debug */,
+				2FF6031AE3B0D8139D481833 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

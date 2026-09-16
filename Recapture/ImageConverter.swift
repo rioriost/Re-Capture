@@ -5,29 +5,38 @@ import SDWebImageWebPCoder
 import UniformTypeIdentifiers
 
 enum ImageConverter {
-    static func convert(sourceURL: URL, destinationURL: URL, outputFormat: OutputFormat, quality: Int) -> Bool {
+    static func convert(sourceURL: URL, destinationURL: URL, outputFormat: OutputFormat, quality: Int) throws -> Bool {
         guard outputFormat != .original, let typeIdentifier = outputFormat.typeIdentifier else {
             return false
         }
 
         let normalizedQuality = max(1, min(100, quality))
+        if sourceURL.pathExtension.lowercased() == "pdf",
+           let document = CGPDFDocument(sourceURL as CFURL), document.numberOfPages > 1 {
+            return false
+        }
+        if let source = CGImageSourceCreateWithURL(sourceURL as CFURL, nil),
+           CGImageSourceGetCount(source) > 1 {
+            return false
+        }
 
+        let encodedImage = NSMutableData()
         if
             let source = CGImageSourceCreateWithURL(sourceURL as CFURL, nil),
             let image = CGImageSourceCreateImageAtIndex(source, 0, nil),
-            let destination = CGImageDestinationCreateWithURL(destinationURL as CFURL, typeIdentifier as CFString, 1, nil)
+            let destination = CGImageDestinationCreateWithData(encodedImage, typeIdentifier as CFString, 1, nil)
         {
             let properties: [CFString: Any] = outputFormat.supportsCompressionQuality
                 ? [kCGImageDestinationLossyCompressionQuality: Double(normalizedQuality) / 100.0]
                 : [:]
             CGImageDestinationAddImage(destination, image, properties as CFDictionary)
             if CGImageDestinationFinalize(destination) {
+                try (encodedImage as Data).write(to: destinationURL, options: .atomic)
                 return true
             }
-            try? FileManager.default.removeItem(at: destinationURL)
         }
 
-        return convertWithBundledCoder(
+        return try convertWithBundledCoder(
             sourceURL: sourceURL,
             destinationURL: destinationURL,
             outputFormat: outputFormat,
@@ -40,7 +49,7 @@ enum ImageConverter {
         destinationURL: URL,
         outputFormat: OutputFormat,
         quality: Int
-    ) -> Bool {
+    ) throws -> Bool {
         guard outputFormat == .webp, let image = NSImage(contentsOf: sourceURL) else {
             return false
         }
@@ -49,20 +58,16 @@ enum ImageConverter {
             .encodeCompressionQuality: Double(quality) / 100.0
         ]
 
-        do {
-            guard
-                let data = SDImageWebPCoder.shared.encodedData(
-                    with: image,
-                    format: .webP,
-                    options: options
-                )
-            else {
-                return false
-            }
-            try data.write(to: destinationURL, options: .atomic)
-            return true
-        } catch {
+        guard
+            let data = SDImageWebPCoder.shared.encodedData(
+                with: image,
+                format: .webP,
+                options: options
+            )
+        else {
             return false
         }
+        try data.write(to: destinationURL, options: .atomic)
+        return true
     }
 }

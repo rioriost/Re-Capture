@@ -2,9 +2,10 @@ import AppKit
 import CoreGraphics
 import Darwin
 import Foundation
+import Security
 import UniformTypeIdentifiers
 
-enum TransferMode: String, CaseIterable, Identifiable {
+enum TransferMode: String, CaseIterable, Identifiable, Sendable {
     case move
     case copy
 
@@ -18,7 +19,7 @@ enum TransferMode: String, CaseIterable, Identifiable {
     }
 }
 
-enum OutputFormat: String, CaseIterable, Identifiable {
+enum OutputFormat: String, CaseIterable, Identifiable, Sendable {
     case original
     case heic
     case webp
@@ -77,7 +78,7 @@ enum OutputFormat: String, CaseIterable, Identifiable {
     }
 }
 
-enum ScreenshotSourceFormat: String, CaseIterable, Identifiable {
+enum ScreenshotSourceFormat: String, CaseIterable, Identifiable, Sendable {
     case png
     case jpeg
     case pdf
@@ -117,7 +118,60 @@ enum ScreenshotSourceFormat: String, CaseIterable, Identifiable {
     }
 }
 
-struct ScreenshotDefaults: Equatable {
+enum SandboxStatus: Sendable {
+    case enabled
+    case disabled
+    case unknown
+
+    static var current: SandboxStatus {
+        guard let task = SecTaskCreateFromSelf(nil),
+              let values = SecTaskCopyValuesForEntitlements(
+                task,
+                ["com.apple.security.app-sandbox"] as CFArray,
+                nil
+              ) as? [String: Any] else {
+            return .unknown
+        }
+        guard let value = values["com.apple.security.app-sandbox"] else { return .disabled }
+        guard CFGetTypeID(value as CFTypeRef) == CFBooleanGetTypeID(),
+              let enabled = value as? Bool else {
+            return .unknown
+        }
+        return enabled ? .enabled : .disabled
+    }
+}
+
+enum ScreenshotPreferencesError: LocalizedError {
+    case sandboxed
+    case sandboxStatusUnknown
+    case synchronizationFailed
+
+    var errorDescription: String? {
+        switch self {
+        case .sandboxed:
+            String(localized: "Direct macOS screenshot preference changes are unavailable in the sandbox. Use Screenshot (Shift-Command-5), then select the same watched folder here.")
+        case .sandboxStatusUnknown:
+            String(localized: "Cannot determine sandbox status. Direct macOS screenshot preference changes are disabled.")
+        case .synchronizationFailed:
+            String(localized: "Could not synchronize macOS screenshot preferences. Refresh and retry; macOS may have received only some changes.")
+        }
+    }
+}
+
+@MainActor
+struct ScreenshotPreferences {
+    var sandboxStatus: () -> SandboxStatus
+    var read: () throws -> ScreenshotDefaults
+    var write: (ScreenshotDefaults) throws -> Void
+
+    static let live = ScreenshotPreferences(
+        sandboxStatus: { .current },
+        read: { try ScreenshotDefaults.current() },
+        write: { try $0.apply() }
+    )
+}
+
+struct ScreenshotDefaults: Equatable, Sendable {
     var locationURL: URL
     var namePrefix: String
     var type: String
@@ -132,8 +186,22 @@ struct ScreenshotDefaults: Equatable {
         realUserHomeDirectoryURL.appendingPathComponent("Desktop", isDirectory: true)
     }
 
-    static func current() -> ScreenshotDefaults {
-        CFPreferencesAppSynchronize(domain as CFString)
+    static var fallback: ScreenshotDefaults {
+        ScreenshotDefaults(
+            locationURL: defaultLocationURL,
+            namePrefix: "Screenshot",
+            type: "png",
+            includeDate: true,
+            disableShadow: false,
+            showThumbnail: true,
+            captureMousePointer: false
+        )
+    }
+
+    static func current() throws -> ScreenshotDefaults {
+        guard CFPreferencesAppSynchronize(domain as CFString) else {
+            throw ScreenshotPreferencesError.synchronizationFailed
+        }
 
         let location = CFPreferencesCopyAppValue("location" as CFString, domain as CFString) as? String
         let name = CFPreferencesCopyAppValue("name" as CFString, domain as CFString) as? String
@@ -157,7 +225,13 @@ struct ScreenshotDefaults: Equatable {
         )
     }
 
-    func apply() {
+    func apply() throws {
+        switch SandboxStatus.current {
+        case .enabled: throw ScreenshotPreferencesError.sandboxed
+        case .unknown: throw ScreenshotPreferencesError.sandboxStatusUnknown
+        case .disabled: break
+        }
+
         CFPreferencesSetAppValue("location" as CFString, locationURL.path as CFString, Self.domain as CFString)
         CFPreferencesSetAppValue("name" as CFString, namePrefix as CFString, Self.domain as CFString)
         CFPreferencesSetAppValue("type" as CFString, type as CFString, Self.domain as CFString)
@@ -165,7 +239,9 @@ struct ScreenshotDefaults: Equatable {
         CFPreferencesSetAppValue("disable-shadow" as CFString, disableShadow as CFBoolean, Self.domain as CFString)
         CFPreferencesSetAppValue("show-thumbnail" as CFString, showThumbnail as CFBoolean, Self.domain as CFString)
         CFPreferencesSetAppValue("capture-mouse-pointer" as CFString, captureMousePointer as CFBoolean, Self.domain as CFString)
-        CFPreferencesAppSynchronize(Self.domain as CFString)
+        guard CFPreferencesAppSynchronize(Self.domain as CFString) else {
+            throw ScreenshotPreferencesError.synchronizationFailed
+        }
     }
 
     private static func optionalBool(forKey key: String, defaultValue: Bool) -> Bool {
@@ -190,7 +266,7 @@ struct ScreenshotDefaults: Equatable {
     }
 }
 
-struct ActiveWindowInfo {
+struct ActiveWindowInfo: Sendable {
     var appName: String
     var windowTitle: String
 
