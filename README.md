@@ -33,6 +33,11 @@ folder that macOS Screenshot uses for its output.
 
 ## File Storage
 
+Settings are grouped into **General**, **Folders**, and **Re-Capture Output**.
+Use **Command-Comma** to open settings. The Output pane shows an example filename,
+explains whether originals are moved or retained, and asks for confirmation before
+processing existing screenshots. The most recently selected settings pane is restored.
+
 Re-Capture does not use its app sandbox container for screenshot output. Before
 any screenshot is saved by Re-Capture, the user must choose both a watched folder
 and an output folder with the standard macOS folder picker. If either folder is missing,

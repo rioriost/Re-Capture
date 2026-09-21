@@ -94,3 +94,33 @@
 "Watched folder" = "Watched folder";
 "Watched folder selected. The macOS save location was not changed." = "Watched folder selected. The macOS save location was not changed.";
 "macOS screenshot settings updated. The watched folder is unchanged." = "macOS screenshot settings updated. The watched folder is unchanged.";
+
+// Settings panes and accessible controls
+"Folders" = "Folders";
+"Status" = "Status";
+"Automatic processing" = "Automatic processing";
+"Automatically rename and convert screenshots in your watched folder." = "Automatically rename and convert screenshots in your watched folder.";
+"Enabled" = "Enabled";
+"Choose a watched folder and an output folder to finish setup." = "Choose a watched folder and an output folder to finish setup.";
+"Choose folders…" = "Choose folders…";
+"Setup" = "Setup";
+"Re-Capture processes your screenshots locally on this Mac." = "Re-Capture processes your screenshots locally on this Mac.";
+"Choose watched folder…" = "Choose watched folder…";
+"Choose output folder…" = "Choose output folder…";
+"Advanced screenshot settings" = "Advanced screenshot settings";
+"Choose screenshot save location…" = "Choose screenshot save location…";
+"Original files" = "Original files";
+"Move removes the original after the output is saved successfully." = "Move removes the original after the output is saved successfully.";
+"Copy keeps the original in your watched folder." = "Copy keeps the original in your watched folder.";
+"Example name" = "Example name";
+"Filename template help" = "Filename template help";
+"Example uses sample app and window names, sequence 0001, and no file extension." = "Example uses sample app and window names, sequence 0001, and no file extension.";
+"Quality" = "Quality";
+"Process existing screenshots using the current output settings. You can also do this while paused." = "Process existing screenshots using the current output settings. You can also do this while paused.";
+"Process existing screenshots?" = "Process existing screenshots?";
+"Process screenshots" = "Process screenshots";
+"Cancel" = "Cancel";
+"Existing screenshots in the watched folder will be renamed or converted. Originals are removed only after saving succeeds." = "Existing screenshots in the watched folder will be renamed or converted. Originals are removed only after saving succeeds.";
+"Existing screenshots in the watched folder will be copied and renamed or converted. Originals are kept." = "Existing screenshots in the watched folder will be copied and renamed or converted. Originals are kept.";
+"Done" = "Done";
+"Choose…" = "Choose…";

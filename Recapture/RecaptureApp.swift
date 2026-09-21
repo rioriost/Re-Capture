@@ -49,6 +49,7 @@ struct RecaptureApp: App {
                 openSettings()
                 NSApp.activate(ignoringOtherApps: true)
             }
+            .keyboardShortcut(",", modifiers: .command)
 
             Divider()
 
@@ -63,13 +64,11 @@ struct RecaptureApp: App {
             Button("Quit Recapture") {
                 NSApp.terminate(nil)
             }
+            .keyboardShortcut("q", modifiers: .command)
         } label: {
-            HStack(spacing: 4) {
-                Image(systemName: settings.isEnabled ? "checkmark.circle.fill" : "pause.circle.fill")
-                    .symbolRenderingMode(.palette)
-                Text(LocalizedStringKey(settings.isEnabled ? "On" : "Off"))
-            }
-            .foregroundStyle(settings.isEnabled ? .green : .red)
+            Label("Re-Capture",
+                  systemImage: settings.isEnabled ? "camera.aperture" : "pause.circle")
+                .accessibilityValue(Text(settings.isEnabled ? "On" : "Off"))
         }
         .onChange(of: settings.processingConfiguration) { _, _ in
             controller.reconfigure()
@@ -80,5 +79,7 @@ struct RecaptureApp: App {
                 .environmentObject(settings)
                 .environmentObject(controller)
         }
+        .defaultSize(width: 700, height: 680)
+        .windowResizability(.contentMinSize)
     }
 }

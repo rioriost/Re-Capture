@@ -94,3 +94,33 @@
 "Watched folder" = "監視フォルダ";
 "Watched folder selected. The macOS save location was not changed." = "監視フォルダを選択しました。macOSの保存先は変更していません。";
 "macOS screenshot settings updated. The watched folder is unchanged." = "macOSのスクリーンショット設定を更新しました。監視フォルダは変更されていません。";
+
+// Settings panes and accessible controls
+"Folders" = "フォルダ";
+"Status" = "状態";
+"Automatic processing" = "自動処理";
+"Automatically rename and convert screenshots in your watched folder." = "監視フォルダ内のスクリーンショットを自動でリネーム・変換します。";
+"Enabled" = "有効";
+"Choose a watched folder and an output folder to finish setup." = "監視フォルダと出力フォルダを選択すると、準備が完了します。";
+"Choose folders…" = "フォルダを選択…";
+"Setup" = "セットアップ";
+"Re-Capture processes your screenshots locally on this Mac." = "スクリーンショットは、このMac内で処理されます。";
+"Choose watched folder…" = "監視フォルダを選択…";
+"Choose output folder…" = "出力フォルダを選択…";
+"Advanced screenshot settings" = "スクリーンショットの詳細設定";
+"Choose screenshot save location…" = "スクリーンショットの保存場所を選択…";
+"Original files" = "元のファイル";
+"Move removes the original after the output is saved successfully." = "「移動」では、出力先への保存に成功した後、元のファイルを削除します。";
+"Copy keeps the original in your watched folder." = "「コピー」では、監視フォルダに元のファイルを残します。";
+"Example name" = "ファイル名の例";
+"Filename template help" = "ファイル名ルールのヘルプ";
+"Example uses sample app and window names, sequence 0001, and no file extension." = "例ではサンプルのアプリ名・ウィンドウ名と連番0001を使用し、拡張子は省略しています。";
+"Quality" = "画質";
+"Process existing screenshots using the current output settings. You can also do this while paused." = "現在の出力設定で既存のスクリーンショットを処理します。自動処理の一時停止中も実行できます。";
+"Process existing screenshots?" = "既存のスクリーンショットを処理しますか？";
+"Process screenshots" = "スクリーンショットを処理";
+"Cancel" = "キャンセル";
+"Existing screenshots in the watched folder will be renamed or converted. Originals are removed only after saving succeeds." = "監視フォルダ内の既存のスクリーンショットをリネーム・変換します。保存に成功した後、元のファイルを削除します。";
+"Existing screenshots in the watched folder will be copied and renamed or converted. Originals are kept." = "監視フォルダ内の既存のスクリーンショットをコピーしてリネーム・変換します。元のファイルは保持されます。";
+"Done" = "完了";
+"Choose…" = "選択…";
