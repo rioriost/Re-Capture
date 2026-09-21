@@ -29,6 +29,7 @@ targets:
         LSApplicationCategoryType: public.app-category.utilities
         LSMinimumSystemVersion: "$(MACOSX_DEPLOYMENT_TARGET)"
         LSUIElement: true
+        ITSAppUsesNonExemptEncryption: false
         NSHumanReadableCopyright: "Copyright © 2026 rio. Released under the MIT License."
     entitlements:
       path: Recapture/Recapture.entitlements
@@ -43,7 +44,7 @@ targets:
         PRODUCT_NAME: Re-Capture
         PRODUCT_MODULE_NAME: Recapture
         MARKETING_VERSION: 1.2.0
-        CURRENT_PROJECT_VERSION: 7
+        CURRENT_PROJECT_VERSION: 8
         MACOSX_DEPLOYMENT_TARGET: "26.0"
   RecaptureTests:
     type: bundle.unit-test

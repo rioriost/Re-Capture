@@ -145,3 +145,29 @@ above: actual Settings scene keyboard commands, full keyboard traversal,
 VoiceOver, system accessibility appearance settings, native Dark material, bulk
 execution through the UI, and macOS 26 runtime remain unverified.
 See [release-1.2.0.md](release-1.2.0.md) for release gates and store status.
+
+## Original-resolution store captures
+
+The developer explicitly authorized the macOS `screencapture` command after the
+computer-use surface could not supply suitable original-resolution files.
+Window-scoped `screencapture -x -o -t jpg -l <fixture-window-id>` captured the
+actual composited settings window, without a shadow or unrelated desktop data.
+This resolves the original-resolution/material limitation for these captures.
+No image generation, retouching, upscaling or UI reconstruction was used.
+
+English and Japanese processes were launched independently, using the existing
+SettingsView with isolated preferences, synthetic paths and a dormant controller.
+All four delivered images are 1280 × 800 JPEG, with no alpha channel; every image
+was visually inspected. The selected tabs, native focus indicators, text and
+controls are readable. The screenshots show the same GUI shipped in builds 7
+and 8; build 8 only adds distribution metadata and bundled dependency notices.
+
+- [English folders](app-store/1.2.0/recapture-en-folders.jpg)
+- [English output](app-store/1.2.0/recapture-en-output.jpg)
+- [Japanese folders](app-store/1.2.0/recapture-ja-folders.jpg)
+- [Japanese output](app-store/1.2.0/recapture-ja-output.jpg)
+
+Both App Store Connect localizations now show the two corresponding new images;
+the old images were removed from the draft, and the saved previews were visually
+checked. Temporary fixture code was removed from the test target. Remaining
+runtime coverage limits above are not superseded by these screenshots.

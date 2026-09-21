@@ -18,6 +18,7 @@
 		8753481A0E5D305DB0A4FC28 /* RecaptureApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578195084729FEE0AF05ADD5 /* RecaptureApp.swift */; };
 		B3106956016CA8372B7681A8 /* AppControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BDF963BD9B31871414D4886 /* AppControllerTests.swift */; };
 		B83ACB28B1260ADD5A0584A3 /* ProcessingJournal.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E9F1CCE196F3DFA8CE92B7 /* ProcessingJournal.swift */; };
+		B8E7127D0C57DF6BC71C4093 /* ThirdPartyNotices.txt in Resources */ = {isa = PBXBuildFile; fileRef = 86EDEAF73511D8815D09ED99 /* ThirdPartyNotices.txt */; };
 		C0117D363CDBADCCA8870E41 /* TemplateRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86532FFE3D6885B5CB1D6BB9 /* TemplateRenderer.swift */; };
 		CC9E6AD16CA2870CB04EBADE /* SettingsStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 247AB53A5F5CE4CDF443B394 /* SettingsStoreTests.swift */; };
 		E1BFC9D697C1715DB6340C98 /* ImageConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48DCAABF88DF85DE719ABB99 /* ImageConverter.swift */; };
@@ -55,6 +56,7 @@
 		846248D60BE5E0160959C5DC /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		86532FFE3D6885B5CB1D6BB9 /* TemplateRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateRenderer.swift; sourceTree = "<group>"; };
 		86AE290F4902553BFC0921FB /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		86EDEAF73511D8815D09ED99 /* ThirdPartyNotices.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ThirdPartyNotices.txt; sourceTree = "<group>"; };
 		C0260081E431B470FBA892B7 /* AppController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppController.swift; sourceTree = "<group>"; };
 		C4E9F1CCE196F3DFA8CE92B7 /* ProcessingJournal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingJournal.swift; sourceTree = "<group>"; };
 		F503470E4C4062B9D5837315 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 				4804AD0DD1E14A7DD7A253EE /* SettingsStore.swift */,
 				32C9045D377996B4388E4D15 /* SettingsView.swift */,
 				86532FFE3D6885B5CB1D6BB9 /* TemplateRenderer.swift */,
+				86EDEAF73511D8815D09ED99 /* ThirdPartyNotices.txt */,
 				66C8997B66C8DF9B54F02A30 /* Localizable.strings */,
 			);
 			path = Recapture;
@@ -215,6 +218,7 @@
 				75E0E475FB3A44E666575B11 /* Assets.xcassets in Resources */,
 				57594198E3CB0EDE6DC0F7D6 /* Localizable.strings in Resources */,
 				2C2CDAB475C23B06A8BDB393 /* PrivacyInfo.xcprivacy in Resources */,
+				B8E7127D0C57DF6BC71C4093 /* ThirdPartyNotices.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,7 +282,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Recapture/Recapture.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				INFOPLIST_FILE = Recapture/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -456,7 +460,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Recapture/Recapture.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 7;
+				CURRENT_PROJECT_VERSION = 8;
 				INFOPLIST_FILE = Recapture/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
