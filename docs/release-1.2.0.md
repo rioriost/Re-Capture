@@ -1,4 +1,4 @@
-# Re-Capture 1.2.0 (7) — release preparation
+# Re-Capture 1.2.0 (8) — release preparation
 
 Status observed 2026-09-21 (JST). This is an update of the macOS app
 `st.rio.recapture`, App Store ID `6786072173`. Minimum macOS remains 26.0.
@@ -7,8 +7,8 @@ Status observed 2026-09-21 (JST). This is an update of the macOS app
 
 - Reorganized settings into General, Folders and Output; clarified Move/Copy,
   added filename examples and bulk confirmation, improved accessible labels.
-- Version 1.2.0 / build 7 in `project.yml` and the generated Xcode project.
-- 74 regression tests passed, 0 failures. Localization lint and diff checks pass.
+- Version 1.2.0 / build 8 in `project.yml` and the generated Xcode project.
+- 74 regression tests passed again for build 8, 0 failures. Localization lint and diff checks pass.
 - Signed universal arm64/x86_64 archive created with Xcode 27.0 (27A266a).
   `codesign --verify --deep --strict` passed. Archive entitlement scope remains
   App Sandbox, app-scoped bookmarks and user-selected read/write files.
@@ -20,7 +20,28 @@ Status observed 2026-09-21 (JST). This is an update of the macOS app
   exposed in the app menu. Utilities category, 4+ rating and standard Apple EULA
   remain. ASC reports 148 available regions and 27 unavailable EU regions.
 
-## Upload evidence
+## Final build 8 and store assets
+
+Build 8 adds bundled SDWebImage, SDWebImageWebPCoder and libwebp license/copyright
+notices, plus the libwebp patent grant. The resource was compared byte-for-byte
+with the archived copy. It also declares `ITSAppUsesNonExemptEncryption=false`,
+matching the build 7 questionnaire. No GUI or processing code changed.
+
+- Code/assets commit: `f56c677`.
+- Archive: `build/AppStore/Re-Capture-1.2.0-8.xcarchive`.
+- Archive/signature inspection: `build/AppStore/preflight-1.2.0-8.json`.
+- Tests: `build/AppStore/test-1.2.0-8.log`, 74 passed.
+- Upload: `build/AppStore/upload-1.2.0-8.log`, `EXPORT SUCCEEDED` at 12:34 JST.
+- ASC build ID: `08577826-b012-494b-b5fc-f37e85045f86`; processing `終了`,
+  TestFlight `提出準備完了`, with no missing-encryption warning.
+- At 12:39 JST, build **1.2.0 (8)** replaced build 7 in the release draft and
+  was saved. The version page shows the build 8 link and disabled Save button;
+  status remains `提出準備中`. No review submission was performed.
+- English/Japanese store screenshots replaced with two original 1280 × 800 JPEGs
+  per locale, no alpha. Saved store previews were visually inspected.
+  [Delivered files and provenance](app-store/1.2.0/README.md).
+
+## Earlier build 7 upload evidence
 
 Archive: `build/AppStore/Re-Capture-1.2.0-7.xcarchive`.
 Archive log: `build/AppStore/archive-1.2.0-7.log`.
@@ -40,8 +61,8 @@ found no implementation of proprietary or standard encryption algorithms;
 `提出準備完了`. No testers were invited or notified.
 
 At 12:22 JST, **1.2.0 (7) was selected and saved in the release draft**.
-The saved page shows its build link, disabled Save button, and enabled Add for
-Review button. Version status remains `提出準備中`.
+The saved page showed its build link, disabled Save button, and enabled Add for
+Review button. This selection was superseded by build 8 at 12:39 JST.
 
 Successful export/upload command (do not upload the same build again):
 
@@ -60,19 +81,19 @@ verified. No review submission or publication has been performed.
 ## App Store Review Preflight
 
 Guidelines checked: live Apple page retrieved 2026-09-21; displayed update
-June 8, 2026. Readiness: **NOT READY**.
+June 8, 2026. Readiness: **READY WITH MANUAL CONFIRMATIONS**.
 
-Counts (rows below): **BLOCKER 1 / WARNING 1 / MANUAL 3 / PASS 6 /
+Counts (rows below): **BLOCKER 0 / WARNING 1 / MANUAL 3 / PASS 7 /
 NOT APPLICABLE 5**. This assessment does not guarantee review approval.
 
 | ID | Result | Finding and next verification |
 | --- | --- | --- |
-| R1 | PASS | Build 1.2.0 (7) uploaded, processing completed, encryption answer saved, and build selected/saved in the version draft. The selected build corresponds to the previously audited archive. |
-| R2 | BLOCKER | Draft screenshots inherited the previous settings UI. Replace with current English/Japanese screenshots and inspect the saved store previews. Diagnostic capture is 1229 × 768 with a system capture indicator, unsuitable for delivery. Use a supported 16:10 Mac size such as 1280 × 800. [2.3](https://developer.apple.com/app-store/review/guidelines/#accurate-metadata), [screenshot specifications](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications) |
+| R1 | PASS | Build 1.2.0 (8) uploaded, processing completed, encryption declaration accepted, and build selected/saved in the version draft at 12:39 JST. The selected build corresponds to the audited build 8 archive. |
+| R2 | PASS | Two current screenshots per language saved in the draft and visually verified. Original window-scoped captures are 1280 × 800 JPEG with no alpha; no generated or retouched UI. [2.3](https://developer.apple.com/app-store/review/guidelines/#accurate-metadata), [screenshot specifications](https://developer.apple.com/help/app-store-connect/reference/app-information/screenshot-specifications) |
 | R3 | WARNING | Review phone/email remain blank. Existing values were preserved; confirm review contact completeness before submission. No contact data was invented. [1.5](https://developer.apple.com/app-store/review/guidelines/#developer-information) |
 | R4 | MANUAL | Native Settings scene shortcuts, complete keyboard/VoiceOver interaction, macOS 26 and a sandboxed archive smoke test remain outstanding. Inspect current GUI evidence and exercise chosen folders plus disposable screenshot processing before review. [2.1](https://developer.apple.com/app-store/review/guidelines/#app-completeness) |
-| R5 | MANUAL | ASC declares no third-party content; technical inspection cannot establish all branding/content rights or complete legal license compliance. No new content or dependency introduced. [5.2](https://developer.apple.com/app-store/review/guidelines/#intellectual-property) |
-| R6 | MANUAL | ASC shows trader declaration and 27 EU regions unavailable. Regional verification/agreements remain unestablished; existing availability is retained. Build 7's encryption questionnaire is now saved. [5 Legal](https://developer.apple.com/app-store/review/guidelines/#legal), [DSA](https://developer.apple.com/help/app-store-connect/manage-compliance-information/manage-european-union-digital-services-act-trader-requirements/) |
+| R5 | MANUAL | ASC declares no third-party content; dependency license/copyright notices are now included and verified in build 8. Technical inspection cannot establish all branding/content rights; no new brand assets or dependency introduced. [5.2](https://developer.apple.com/app-store/review/guidelines/#intellectual-property) |
+| R6 | MANUAL | ASC shows trader declaration and 27 EU regions unavailable. Regional verification/agreements remain unestablished; existing availability is retained. Build 8 explicitly declares no non-exempt encryption and ASC reports it ready. [5 Legal](https://developer.apple.com/app-store/review/guidelines/#legal), [DSA](https://developer.apple.com/help/app-store-connect/manage-compliance-information/manage-european-union-digital-services-act-trader-requirements/) |
 | P1 | PASS | 74 automated tests pass; build/archive identity and signature verified locally. |
 | P2 | PASS | Selected-folder sandbox/bookmark scope retained; no new permission or processing/storage code. |
 | P3 | PASS | Saved localized release notes and actionable review setup steps; no account/backend needed by app. |
@@ -87,7 +108,7 @@ NOT APPLICABLE 5**. This assessment does not guarantee review approval.
 | Guideline family | Coverage | Evidence |
 | --- | --- | --- |
 | Safety | PASS / WARNING / N/A | Local utility, scoped file access; support path present; R3, N1. |
-| Performance | BLOCKER / MANUAL / PASS | R2, R4 remain; R1 resolved; completed tests/archive; unchanged self-contained sandbox behavior. |
+| Performance | MANUAL / PASS | R1–R2 resolved; R4 coverage limits remain; build 8 tests/archive pass. |
 | Business | N/A | N2; no new monetization; existing pricing unchanged. |
 | Design | PASS / MANUAL / N/A | Native settings and utility function; R4–R5, N4. |
 | Legal | PASS / MANUAL / N/A | Privacy agreement across source/bundle/store; R5–R6, N5. |
@@ -99,17 +120,13 @@ Connect version/localizations, review information, App Information, App Privacy,
 Pricing and Availability. UI evidence/limitations are in
 [the GUI review](gui-hig-review-2026-09-21.md).
 
-The selected App Store Connect build is the reviewed 1.2.0 (7) archive from
-code commit `7c3b0e8`. Bundle inspection and signature verification were repeated
-after upload, with results in `build/AppStore/preflight-after-upload-1.2.0-7.json`.
-No production code or dependency changes occurred after the original audit.
-All five guideline families were reassessed against the same binary and updated
-store state; unresolved findings remain listed above.
-
-An additional isolated GUI fixture passed at 12:19 JST, but the standard system
-screenshot UI could not be launched through the available computer-use surface.
-The new store screenshots remain outstanding; the draft still contains the old
-images. No capture permissions or user screenshot preferences were changed.
+Build 8 was audited across all five guideline families against the latest source,
+signed bundle, saved store metadata and new screenshots. The signed entitlements
+remain sandbox, app-scoped bookmarks and user-selected read/write files. No new
+protected-resource usage, tracking, networking or purchases were introduced.
+The new resource and encryption declaration are the only functional distribution
+changes after build 7. R3–R6 remain explicitly scoped manual/coverage limitations.
+The temporary capture fixture was removed; committed tests are unchanged.
 
 **No submission action was performed.**
 
